@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>::: Prawda Epsilon - Wejście do Świątyni :::</title>
+    <title>::: KIFFLOM! The Epsilon Program - Wejście do Prawdy :::</title>
     
     <style>
         /* Stylistyka a'la Wczesne 2000s - Jaskrawe kolory i brak umiaru */
         body {
-            background-color: #000000; /* Ciemne tło, żeby kolory biły po oczach */
+            background-color: #000000; /* Ciemne tło */
             color: #FFFFFF;
-            font-family: 'Comic Sans MS', 'Arial', sans-serif; /* Pamiętna czcionka */
+            /* Zmieniona czcionka na bardziej typową i czytelną dla epoki 2000s */
+            font-family: 'Verdana', 'Trebuchet MS', sans-serif; 
             margin: 0;
             padding: 0;
             text-align: center;
@@ -27,7 +28,7 @@
             text-align: center;
         }
 
-        /* Pulsjący Nagłówek */
+        /* Pulsjący Nagłówek (Usunięto skalowanie, by poprawić responsywność) */
         .pulsing-header {
             font-size: 32px;
             font-weight: 900;
@@ -37,12 +38,16 @@
             margin-bottom: 25px;
             padding: 10px 0;
             border: 3px dashed #FF0000;
-            animation: pulse 1s infinite alternate; /* Animacja pulsowania */
+            animation: pulse-color 1.5s infinite alternate; /* Animacja pulsowania kolorem */
+            /* Zapewnienie, że element nie rusza się fizycznie */
+            transform: scale(1.0); 
+            transition: none;
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1.0); opacity: 1.0; }
-            100% { transform: scale(1.05); opacity: 0.8; color: #00FFFF; } /* Zmiana koloru/rozmiaru */
+        /* Zmiana animacji na samą zmianę koloru */
+        @keyframes pulse-color {
+            0% { color: #FFFF00; text-shadow: 3px 3px 5px #FF0000; }
+            100% { color: #00FFFF; text-shadow: 3px 3px 5px #0000FF; } 
         }
 
         .main-text {
@@ -85,6 +90,14 @@
             color: #00FFFF; /* Turkus */
             margin-top: 10px;
         }
+        
+        /* Dodanie stylizacji dla nazwy sekty */
+        .cult-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #00FFFF;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -94,6 +107,8 @@
     </div>
 
     <div class="container">
+        
+        <p class="cult-name">The Epsilon Program - KIFFLOM!</p>
         
         <p class="main-text">
             WITAJ W NASZEJ SEKCIE. JEŚLI CHCESZ ZOBACZYĆ <br>PRAWDZIWEGO BOGA, KLIKNIJ TUTAJ:
