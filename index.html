@@ -24,7 +24,7 @@
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite; /* Animowane tło */
             color: white;
-            overflow: hidden; /* Żeby paski przewijania nie psuły efektu */
+            overflow: hidden;
         }
 
         /* ANIMACJA TŁA */
@@ -89,75 +89,10 @@
             transform: scale(0.95);
         }
 
-        /* LINK DO PRZYCISKU (usuwamy domyślne podkreślenie) */
+        /* LINK DO PRZYCISKU */
         a {
             text-decoration: none;
         }
-
-        /* SEKCJA EASTER EGG (NA DOLE) */
-        .footer {
-            position: absolute;
-            bottom: 20px;
-            text-align: center;
-            width: 100%;
-        }
-
-        .secret-btn {
-            background: transparent;
-            border: 1px solid rgba(255,255,255,0.3);
-            color: rgba(255,255,255,0.6);
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.7rem;
-            transition: 0.3s;
-        }
-
-        .secret-btn:hover {
-            background: rgba(255,255,255,0.2);
-            color: white;
-        }
-
-        /* STYL UKRYTEGO NAPISU */
-        #tajny-tekst {
-            display: none; /* Ukryty na start */
-            font-size: 4rem;
-            font-weight: 900;
-            margin-top: 20px;
-            text-transform: uppercase;
-            /* Tęczowy tekst */
-            background: linear-gradient(to right, #ef5350, #f48fb1, #7e57c2, #2196f3, #26c6da, #43a047, #eeff41, #f9a825, #ff5722);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            animation: rainbow 2s linear infinite, shake 0.5s infinite;
-            position: absolute;
-            bottom: 60px; /* Nad przyciskiem */
-            left: 0; 
-            right: 0;
-            text-shadow: 0px 0px 20px rgba(255,255,255,0.5);
-        }
-
-        /* Animacja tęczy */
-        @keyframes rainbow { 
-            to { background-position: 2000vh; }
-        }
-
-        /* Animacja trzęsienia */
-        @keyframes shake {
-            0% { transform: translate(1px, 1px) rotate(0deg); }
-            10% { transform: translate(-1px, -2px) rotate(-1deg); }
-            20% { transform: translate(-3px, 0px) rotate(1deg); }
-            30% { transform: translate(3px, 2px) rotate(0deg); }
-            40% { transform: translate(1px, -1px) rotate(1deg); }
-            50% { transform: translate(-1px, 2px) rotate(-1deg); }
-            60% { transform: translate(-3px, 1px) rotate(0deg); }
-            70% { transform: translate(3px, 1px) rotate(-1deg); }
-            80% { transform: translate(-1px, -1px) rotate(1deg); }
-            90% { transform: translate(1px, 2px) rotate(0deg); }
-            100% { transform: translate(1px, -2px) rotate(-1deg); }
-        }
-
     </style>
 </head>
 <body>
@@ -169,27 +104,6 @@
             <button class="youtube-btn">ZOBACZ FILM 🎬</button>
         </a>
     </div>
-
-    <h2 id="tajny-tekst">Gownobełt</h2>
-
-    <div class="footer">
-        <button class="secret-btn" onclick="pokazNiespodzianke()">easteregg</button>
-    </div>
-
-    <script>
-        function pokazNiespodzianke() {
-            var tekst = document.getElementById("tajny-tekst");
-            var audio = new Audio('https://www.myinstants.com/media/sounds/vine-boom.mp3'); // Opcjonalny dźwięk "Boom"
-            
-            if (tekst.style.display === "block") {
-                tekst.style.display = "none";
-            } else {
-                tekst.style.display = "block";
-                // Jeśli chcesz dźwięk, odkomentuj poniższą linię:
-                // audio.play(); 
-            }
-        }
-    </script>
 
 </body>
 </html>
