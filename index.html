@@ -1,12 +1,195 @@
 <!DOCTYPE html>
-<html>
+<html lang="pl">
 <head>
-    <title>Moja strona</title>
-    <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strona Pabla - Official</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;900&display=swap" rel="stylesheet">
+    <style>
+        /* RESET I OGÓLNE */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite; /* Animowane tło */
+            color: white;
+            overflow: hidden; /* Żeby paski przewijania nie psuły efektu */
+        }
+
+        /* ANIMACJA TŁA */
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* KARTA GŁÓWNA (Efekt szkła) */
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            text-align: center;
+            animation: slideIn 1s ease-out; /* Animacja wejścia */
+            max-width: 90%;
+        }
+
+        /* ANIMACJA WEJŚCIA KARTY */
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            letter-spacing: 1px;
+        }
+
+        /* SUPER PRZYCISK */
+        .youtube-btn {
+            background: linear-gradient(45deg, #ff0000, #ff4d4d);
+            color: white;
+            padding: 18px 40px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.4);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .youtube-btn:hover {
+            transform: scale(1.05) translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 0, 0, 0.6);
+        }
+
+        .youtube-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* LINK DO PRZYCISKU (usuwamy domyślne podkreślenie) */
+        a {
+            text-decoration: none;
+        }
+
+        /* SEKCJA EASTER EGG (NA DOLE) */
+        .footer {
+            position: absolute;
+            bottom: 20px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .secret-btn {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.3);
+            color: rgba(255,255,255,0.6);
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            transition: 0.3s;
+        }
+
+        .secret-btn:hover {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+
+        /* STYL UKRYTEGO NAPISU */
+        #tajny-tekst {
+            display: none; /* Ukryty na start */
+            font-size: 4rem;
+            font-weight: 900;
+            margin-top: 20px;
+            text-transform: uppercase;
+            /* Tęczowy tekst */
+            background: linear-gradient(to right, #ef5350, #f48fb1, #7e57c2, #2196f3, #26c6da, #43a047, #eeff41, #f9a825, #ff5722);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: rainbow 2s linear infinite, shake 0.5s infinite;
+            position: absolute;
+            bottom: 60px; /* Nad przyciskiem */
+            left: 0; 
+            right: 0;
+            text-shadow: 0px 0px 20px rgba(255,255,255,0.5);
+        }
+
+        /* Animacja tęczy */
+        @keyframes rainbow { 
+            to { background-position: 2000vh; }
+        }
+
+        /* Animacja trzęsienia */
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+
+    </style>
 </head>
 <body>
-    <h1>Witam na mojej stronie!</h1>
-    <p>To moja strona stworzona od zera!</p>
-    <script src="script.js"></script>
+
+    <div class="container">
+        <h1>Witam na mojej stronie</h1>
+        
+        <a href="https://youtube.com/shorts/gRMtvqN-x2Q?si=bZvG6uJMDIQy7m7S" target="_blank">
+            <button class="youtube-btn">ZOBACZ FILM 🎬</button>
+        </a>
+    </div>
+
+    <h2 id="tajny-tekst">Gownobełt</h2>
+
+    <div class="footer">
+        <button class="secret-btn" onclick="pokazNiespodzianke()">easteregg</button>
+    </div>
+
+    <script>
+        function pokazNiespodzianke() {
+            var tekst = document.getElementById("tajny-tekst");
+            var audio = new Audio('https://www.myinstants.com/media/sounds/vine-boom.mp3'); // Opcjonalny dźwięk "Boom"
+            
+            if (tekst.style.display === "block") {
+                tekst.style.display = "none";
+            } else {
+                tekst.style.display = "block";
+                // Jeśli chcesz dźwięk, odkomentuj poniższą linię:
+                // audio.play(); 
+            }
+        }
+    </script>
+
 </body>
 </html>
