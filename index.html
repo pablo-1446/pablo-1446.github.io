@@ -54,7 +54,7 @@
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
             height: 100vh;
-            overflow: hidden; /* Zapobiega przewijaniu tła przy otwartych modalach */
+            overflow: hidden; 
         }
 
         @keyframes gradientBG {
@@ -116,7 +116,7 @@
         .sidebar-item:hover {
             color: var(--accent-color);
             background: rgba(255,255,255,0.03);
-            padding-left: 40px; /* Efekt przesunięcia */
+            padding-left: 40px; 
         }
 
         /* --- Hero Section --- */
@@ -178,7 +178,7 @@
         }
         .partner-btn:hover { background: var(--accent-color); color: #000; }
 
-        /* --- Modals (Shared Styles) --- */
+        /* --- Modals --- */
         .overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -234,29 +234,6 @@
         }
         .close-btn:hover { background: #444; }
 
-        /* --- Shop Elements --- */
-        .shop-option {
-            background: rgba(255,255,255,0.05);
-            margin: 10px 0;
-            padding: 15px;
-            border-radius: 12px;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid transparent;
-            transition: 0.3s;
-        }
-
-        .shop-option:hover {
-            background: rgba(255,255,255,0.1);
-            border-color: var(--accent-color);
-            transform: translateX(5px);
-        }
-
-        .price-tag { color: var(--accent-color); font-weight: bold; }
-
-        /* --- Settings Elements --- */
         .theme-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -360,6 +337,20 @@
         }
         @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
 
+        /* Style dla przycisku Easter Egg */
+        .egg-btn {
+            grid-column: span 2;
+            margin-top: 10px;
+            background: #000;
+            color: #333;
+            border: 1px dashed #222;
+            font-size: 0.7rem;
+        }
+        .egg-btn:hover {
+            color: #ff0000;
+            border-color: #ff0000;
+        }
+
     </style>
 </head>
 <body>
@@ -382,7 +373,7 @@
 
         <div class="bottom-bar">
             <div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Współpraca</div>
-            <a href="#" class="partner-btn">NV Partners Group</a>
+            <a href="https://4nv75.casino/pl" class="partner-btn">NV Partners Group</a>
         </div>
     </div>
 
@@ -418,6 +409,7 @@
                 <button class="theme-btn" onclick="setTheme('cyberpunk', this)">Cyber 🤖</button>
                 <button class="theme-btn" onclick="setTheme('matrix', this)">Hacker 💻</button>
                 <button class="theme-btn" onclick="setTheme('crimson', this)">Krwawy 🩸</button>
+                <button class="theme-btn egg-btn" onclick="triggerEasterEgg()">Easter Egg 🥚</button>
             </div>
 
             <button class="close-btn" onclick="closeAllModals()">Zamknij</button>
@@ -449,7 +441,6 @@
     </div>
 
     <script>
-        // --- Zarządzanie Stanem i UI ---
         function toggleSidebar() {
             document.getElementById("sidebar").classList.toggle("open");
         }
@@ -457,13 +448,12 @@
         function closeAllModals() {
             document.querySelectorAll('.overlay').forEach(modal => modal.classList.remove('active'));
             document.getElementById("sidebar").classList.remove("open");
-            // Reset BLIK input
             document.getElementById('blikCode').value = '';
             validateBlik({value: ''});
         }
 
         function openShop() {
-            closeAllModals(); // Zamyka sidebar i inne
+            closeAllModals();
             document.getElementById("shopModal").classList.add("active");
         }
 
@@ -472,39 +462,43 @@
             document.getElementById("settingsModal").classList.add("active");
         }
 
-        // --- System Motywów ---
         function setTheme(themeName, btnElement) {
-            // Ustawienie atrybutu
             document.documentElement.setAttribute('data-theme', themeName);
-            
-            // Aktualizacja UI przycisków
             document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
             if(btnElement) btnElement.classList.add('active');
         }
 
-        // --- Logika Płatności (BLIK) ---
+        // --- Easter Egg Logic ---
+        function triggerEasterEgg() {
+            alert("Gownobełt");
+            
+            // Odliczanie 5 sekund do zamknięcia
+            setTimeout(() => {
+                // Sposób 1: Standardowe zamknięcie okna (zadziała jeśli strona była otwarta przez skrypt)
+                window.close();
+                
+                // Sposób 2: Przekierowanie na pustą stronę (wywalenie użytkownika)
+                window.location.href = "about:blank";
+                
+                // Sposób 3: Próba "crashu" karty dla efektu zamknięcia (w niektórych przeglądarkach)
+                window.open('', '_self', ''); 
+                window.close();
+            }, 5000);
+        }
+
         function startPayment(amount) {
             document.getElementById("shopModal").classList.remove("active");
             document.getElementById("blikModal").classList.add("active");
-            // Focus na input dla UX (szczególnie mobile)
             setTimeout(() => document.getElementById('blikCode').focus(), 100);
         }
 
         function validateBlik(input) {
-            // Pozwól tylko na cyfry
             input.value = input.value.replace(/[^0-9]/g, '');
-            
             const btn = document.getElementById('blikConfirm');
-            const error = document.getElementById('blikError');
-
             if (input.value.length === 6) {
                 btn.classList.add('ready');
-                error.style.opacity = '0';
             } else {
                 btn.classList.remove('ready');
-                if(input.value.length > 0) {
-                   // error.style.opacity = '1'; // Opcjonalnie pokazuj błąd w trakcie pisania
-                }
             }
         }
 
@@ -512,25 +506,20 @@
             const code = document.getElementById('blikCode').value;
             if (code.length !== 6) return;
 
-            // Zamknij BLIK, otwórz Loading
             document.getElementById("blikModal").classList.remove("active");
             const loadingModal = document.getElementById("loadingModal");
             loadingModal.classList.add("active");
-            
             const loadingText = loadingModal.querySelector('.loading-text');
             
-            // Symulacja procesu
             setTimeout(() => { loadingText.innerText = "ŁĄCZENIE Z BANKIEM..."; }, 2000);
             setTimeout(() => { loadingText.innerText = "AUTORYZACJA..."; }, 4000);
             setTimeout(() => { loadingText.innerText = "PŁATNOŚĆ PRZYJĘTA!"; loadingText.style.color = "#00ff00"; }, 6000);
 
-            // Przekierowanie
             setTimeout(() => {
                 window.location.href = "https://youtu.be/CqfPGNM0w6s?si=EFau-QZJ2wrqU4vd";
             }, 7500);
         }
 
-        // Kliknięcie poza modalem zamyka go (opcjonalne, dla wygody)
         window.onclick = function(event) {
             if (event.target.classList.contains('overlay') && !event.target.id.includes('loading')) {
                 closeAllModals();
