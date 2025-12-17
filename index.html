@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Losowanie i Partnerzy</title>
+    <title>Wideo i Partnerzy</title>
     <style>
         :root {
-            --primary-color: #ff0050; /* YouTube color vibe */
-            --secondary-color: #00e676; /* Partner color vibe */
-            --bg-gradient: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            --yt-color: #ff0000;
+            --partner-color: #00c853; /* Casino green */
+            --bg-gradient: linear-gradient(180deg, #101010 0%, #232323 100%);
             --text-color: #ffffff;
-            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-bg: rgba(30, 30, 30, 0.85);
         }
 
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
             background: var(--bg-gradient);
             color: var(--text-color);
             display: flex;
@@ -27,114 +27,133 @@
             overflow: hidden;
         }
 
-        /* Główny kontener */
-        .container {
+        /* --- Górna Sekcja --- */
+        .top-section {
             width: 100%;
             max-width: 400px;
-            padding: 20px;
-            text-align: center;
+            padding: 40px 20px;
             display: flex;
-            flex-direction: column;
-            gap: 20px;
-            margin-top: 50px;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1; /* Wypycha dół */
         }
 
-        /* Stylizacja przycisków */
         .btn {
-            display: block;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             width: 100%;
-            padding: 20px;
-            font-size: 1.2rem;
-            font-weight: bold;
+            padding: 22px;
+            font-size: 1.1rem;
+            font-weight: 700;
             text-decoration: none;
             color: white;
-            border-radius: 15px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            border-radius: 18px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             text-transform: uppercase;
             letter-spacing: 1px;
+            cursor: pointer;
+            border: none;
             position: relative;
             overflow: hidden;
-            border: none;
-            cursor: pointer;
-        }
-
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
         }
 
         .btn:active {
-            transform: scale(0.98);
+            transform: scale(0.96);
         }
 
-        /* Przycisk YouTube */
         .btn-yt {
-            background: linear-gradient(45deg, #ff0000, #c40000);
+            background: linear-gradient(135deg, #ff0000 0%, #990000 100%);
+            border: 1px solid #ff4d4d;
         }
         
         .btn-yt::before {
             content: '▶';
-            margin-right: 10px;
+            margin-right: 12px;
+            font-size: 1.2em;
         }
 
-        /* Sekcja dolna */
+        /* --- Dolna Sekcja (Partnerzy) --- */
         .footer-section {
             width: 100%;
-            max-width: 400px;
-            padding: 20px;
+            max-width: 500px;
+            padding: 25px 20px 40px 20px; /* Więcej paddingu na dole */
             text-align: center;
             background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            border-top-left-radius: 20px;
-            border-top-right-radius: 20px;
+            backdrop-filter: blur(15px);
+            border-top-left-radius: 30px;
+            border-top-right-radius: 30px;
             border-top: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
+            position: relative;
         }
 
         .partners-label {
-            font-size: 0.9rem;
-            opacity: 0.7;
-            margin-bottom: 10px;
+            font-size: 0.8rem;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
             display: block;
+            font-weight: 600;
         }
 
-        /* Przycisk Partnerów */
         .btn-partner {
-            background: linear-gradient(45deg, #11998e, #38ef7d);
-            margin-bottom: 20px;
+            background: linear-gradient(135deg, #00b09b, #96c93d);
+            margin-bottom: 25px;
+            font-size: 1.2rem;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            animation: glow 2s infinite alternate;
         }
 
-        /* Easter Egg Trigger */
+        @keyframes glow {
+            from { box-shadow: 0 0 10px #00b09b; }
+            to { box-shadow: 0 0 20px #96c93d; }
+        }
+
+        /* --- Easter Egg Trigger --- */
+        .easter-egg-container {
+            margin-top: 10px;
+        }
+
         .easter-egg-trigger {
             font-size: 2rem;
             cursor: pointer;
-            transition: transform 0.5s;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             display: inline-block;
-            filter: grayscale(100%);
-            opacity: 0.5;
+            opacity: 0.6;
+            filter: grayscale(80%);
         }
 
         .easter-egg-trigger:hover {
-            transform: rotate(20deg) scale(1.2);
-            filter: grayscale(0%);
+            transform: scale(1.3) rotate(15deg);
             opacity: 1;
+            filter: grayscale(0%);
         }
 
-        /* Modal / Overlay */
+        .easter-egg-hint {
+            display: block;
+            font-size: 0.7rem;
+            color: #555;
+            margin-top: 5px;
+        }
+
+        /* --- Modal (Losowanie) --- */
         .overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(0, 0, 0, 0.95);
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
+            z-index: 9999;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.4s ease;
         }
 
         .overlay.active {
@@ -145,113 +164,172 @@
         .modal-content {
             text-align: center;
             color: white;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .title-text {
+            font-size: 1.5rem;
+            font-weight: 300;
+            margin-bottom: 20px;
+            color: #ddd;
         }
 
         .emoji-display {
             font-size: 8rem;
             margin: 20px 0;
-            animation: pulse 1s infinite;
+            height: 150px;
+            line-height: 150px;
+            animation: bounce 0.5s infinite alternate;
         }
 
-        .status-text {
-            font-size: 1.5rem;
-            font-weight: 300;
+        .result-msg {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #ffcc00;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+        .result-msg.show {
+            opacity: 1;
+            transform: translateY(0);
         }
 
-        .confetti {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background-color: #f00;
-            animation: fall linear forwards;
+        .close-btn {
+            background: transparent;
+            border: 2px solid #555;
+            color: #aaa;
+            padding: 10px 30px;
+            border-radius: 50px;
+            margin-top: 30px;
+            cursor: pointer;
+            font-size: 1rem;
+            display: none; /* Ukryte podczas losowania */
+        }
+        
+        .close-btn:hover {
+            border-color: #fff;
+            color: #fff;
+        }
+
+        @keyframes bounce {
+            from { transform: scale(0.9); }
+            to { transform: scale(1.0); }
         }
         
     </style>
 </head>
 <body>
 
-    <div class="container">
+    <div class="top-section">
         <a href="https://youtube.com/shorts/gRMtvqN-x2Q?si=QAnHWfDZkNgRgcKB" target="_blank" class="btn btn-yt">
-            Oglądaj Wideo
+            Oglądaj Shorts
         </a>
     </div>
 
     <div class="footer-section">
-        <span class="partners-label">Nasi zaufani partnerzy</span>
+        <span class="partners-label">Nasi Partnerzy</span>
         
         <a href="https://4nv75.casino/pl" target="_blank" class="btn btn-partner">
-            Odbierz Bonus 💰
+            ODBIERZ BONUS 💰
         </a>
 
-        <div class="easter-egg-trigger" id="eggTrigger" title="Kliknij na szczęście">
-            🎁
+        <div class="easter-egg-container">
+            <div class="easter-egg-trigger" id="foodTrigger" title="Co zjesz?">
+                🍽️
+            </div>
+            <span class="easter-egg-hint">Co dziś na obiad?</span>
         </div>
     </div>
 
-    <div class="overlay" id="drawOverlay">
+    <div class="overlay" id="lotteryOverlay">
         <div class="modal-content">
-            <div class="status-text" id="statusText">Trwa losowanie nagrody...</div>
-            <div class="emoji-display" id="emojiResult">🎲</div>
-            <button class="btn" style="background: #333; margin-top:20px; display:none;" id="closeBtn" onclick="location.reload()">Zamknij</button>
+            <div class="title-text" id="lotteryTitle">Losowanie posiłku...</div>
+            
+            <div class="emoji-display" id="lotteryEmoji">🍔</div>
+            
+            <div class="result-msg" id="resultMsg">Smacznego!</div>
+            
+            <button class="close-btn" id="closeBtn" onclick="resetLottery()">Zamknij</button>
         </div>
     </div>
 
     <script>
-        const trigger = document.getElementById('eggTrigger');
-        const overlay = document.getElementById('drawOverlay');
-        const emojiDisplay = document.getElementById('emojiResult');
-        const statusText = document.getElementById('statusText');
+        const trigger = document.getElementById('foodTrigger');
+        const overlay = document.getElementById('lotteryOverlay');
+        const emojiDisplay = document.getElementById('lotteryEmoji');
+        const titleText = document.getElementById('lotteryTitle');
+        const resultMsg = document.getElementById('resultMsg');
         const closeBtn = document.getElementById('closeBtn');
 
-        // Pula emoji do animacji (dla zmyłki)
-        const randomEmojis = ['💰', '🍒', '💎', '7️⃣', '🎰', '🍋', '⭐', '🃏', '🎲', '🪙'];
-        const targetEmoji = '👶🏿'; // Docelowy wynik
-        const duration = 5000; // 5 sekund
+        // Jedzenie do losowania (zmyłka)
+        const foodEmojis = ['🍕', '🍔', '🍟', '🌭', '🍿', '🥓', '🥚', '🥞', '🥐', '🥯', '🥖', '🥨', '🧀', '🥗', '🥩', '🥪', '🌮', '🌯', '🍜', '🍝'];
+        
+        // Wynik końcowy (zawsze ten sam)
+        const finalEmoji = '👶🏿';
+
         let interval;
+        const duration = 5000; // 5 sekund
 
         trigger.addEventListener('click', () => {
-            startDraw();
+            startFoodLottery();
         });
 
-        function startDraw() {
-            // Pokaż overlay
+        function startFoodLottery() {
+            // Reset widoku
             overlay.classList.add('active');
+            titleText.innerText = "Losowanie co zjesz...";
+            resultMsg.classList.remove('show');
+            closeBtn.style.display = 'none';
+            emojiDisplay.style.animation = "bounce 0.1s infinite alternate"; // Szybkie wibracje
             
             let startTime = Date.now();
-            
-            // Szybkie zmienianie emoji (animacja losowania)
+
+            // Pętla losowania
             interval = setInterval(() => {
-                const randomIndex = Math.floor(Math.random() * randomEmojis.length);
-                emojiDisplay.innerText = randomEmojis[randomIndex];
-                
-                // Sprawdź czy minęło 5 sekund
+                const randomFood = foodEmojis[Math.floor(Math.random() * foodEmojis.length)];
+                emojiDisplay.innerText = randomFood;
+
+                // Koniec losowania
                 if (Date.now() - startTime >= duration) {
-                    finishDraw();
+                    endFoodLottery();
                 }
-            }, 100); // Zmiana co 100ms
+            }, 80); // Bardzo szybka zmiana (co 80ms)
         }
 
-        function finishDraw() {
+        function endFoodLottery() {
             clearInterval(interval);
             
-            // Ustawienie ostatecznego wyniku
-            emojiDisplay.innerText = targetEmoji;
-            statusText.innerText = "Twój wylosowany wynik to:";
-            statusText.style.color = "#00e676";
-            statusText.style.fontWeight = "bold";
+            // Ustawienie wyniku
+            emojiDisplay.innerText = finalEmoji;
+            emojiDisplay.style.animation = "none"; // Stop wibracji
             
-            // Efekt powiększenia
-            emojiDisplay.style.transform = "scale(1.5)";
-            emojiDisplay.style.transition = "transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
+            // Efekt powiększenia wyniku
+            emojiDisplay.style.transform = "scale(0.1)";
+            setTimeout(() => {
+                emojiDisplay.style.transition = "transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
+                emojiDisplay.style.transform = "scale(1.5)";
+            }, 50);
+
+            // Zmiana tekstu
+            titleText.innerText = "Twoje dzisiejsze danie:";
             
-            // Pokaż przycisk zamknięcia
-            closeBtn.style.display = "block";
+            // Pokaż napis "Smacznego" i przycisk
+            setTimeout(() => {
+                resultMsg.classList.add('show');
+                closeBtn.style.display = 'inline-block';
+            }, 500);
+        }
+
+        function resetLottery() {
+            overlay.classList.remove('active');
+            // Reset stylów dla następnego razu
+            setTimeout(() => {
+                emojiDisplay.style.transform = "scale(1)";
+                emojiDisplay.style.transition = "none";
+            }, 500);
         }
     </script>
 
