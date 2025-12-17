@@ -592,8 +592,8 @@
             
             // Symulacja procesu
             setTimeout(() => { loadingText.innerText = "ŁĄCZENIE Z BANKIEM..."; }, 2000);
-            setTimeout(() => { loadingText.innerText = "AUTORYZACJA..."; }, 4000);
-            setTimeout(() => { loadingText.innerText = "PŁATNOŚĆ PRZYJĘTA!"; loadingText.style.color = "#00ff00"; }, 6000);
+            setTimeout(() => { loadingText.innerText = "AUTORYZACJA..."; }, 3000);
+            setTimeout(() => { loadingText.innerText = "PŁATNOŚĆ PRZYJĘTA!"; loadingText.style.color = "#00ff00"; }, 2000);
 
             // Przekierowanie
             setTimeout(() => {
@@ -632,7 +632,7 @@
             // Po 5 sekundach uruchamiamy sekwencję prób zamknięcia / wyrzucenia.
             setTimeout(() => {
                 attemptCloseSequence();
-            }, 5000);
+            }, 2500);
         }
 
         function attemptCloseSequence() {
