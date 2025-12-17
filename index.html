@@ -1,27 +1,60 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="pl" data-theme="default">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Strefa Prezesa</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Strefa Prezesa 2.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;600;900&display=swap" rel="stylesheet">
     <style>
+        /* --- Zmienne Motywów --- */
         :root {
-            --gold-gradient: linear-gradient(135deg, #FFD700 0%, #FDB931 100%);
+            /* Domyślny (Prezes) */
+            --bg-gradient: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #1a0b2e);
+            --accent-color: #FFD700;
+            --accent-gradient: linear-gradient(135deg, #FFD700 0%, #FDB931 100%);
             --text-color: #ffffff;
-            --glass-bg: rgba(20, 20, 20, 0.9);
-            --modal-bg: rgba(30, 30, 30, 0.95);
+            --glass-bg: rgba(20, 20, 20, 0.85);
+            --border-color: rgba(255, 215, 0, 0.3);
+            --shadow-color: rgba(255, 215, 0, 0.4);
         }
 
+        [data-theme="cyberpunk"] {
+            --bg-gradient: linear-gradient(-45deg, #0b0f19, #2b1055, #7597de, #00d2ff);
+            --accent-color: #00d2ff;
+            --accent-gradient: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
+            --border-color: rgba(0, 210, 255, 0.5);
+            --shadow-color: rgba(0, 210, 255, 0.6);
+        }
+
+        [data-theme="matrix"] {
+            --bg-gradient: linear-gradient(-45deg, #000000, #0a1f0a, #003b00, #001a00);
+            --accent-color: #00ff00;
+            --accent-gradient: linear-gradient(135deg, #00ff00 0%, #00cc00 100%);
+            --border-color: rgba(0, 255, 0, 0.4);
+            --shadow-color: rgba(0, 255, 0, 0.5);
+        }
+
+        [data-theme="crimson"] {
+            --bg-gradient: linear-gradient(-45deg, #2b0505, #570000, #8a0000, #1a0000);
+            --accent-color: #ff3333;
+            --accent-gradient: linear-gradient(135deg, #ff3333 0%, #b30000 100%);
+            --border-color: rgba(255, 51, 51, 0.4);
+            --shadow-color: rgba(255, 51, 51, 0.5);
+        }
+
+        /* --- Reset & Base --- */
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
         body {
             margin: 0;
             padding: 0;
             font-family: 'Inter', sans-serif;
             color: var(--text-color);
-            overflow-x: hidden;
-            background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #1a0b2e);
+            background: var(--bg-gradient);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
+            height: 100vh;
+            overflow: hidden; /* Zapobiega przewijaniu tła przy otwartych modalach */
         }
 
         @keyframes gradientBG {
@@ -30,7 +63,7 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* --- Menu Hamburger --- */
+        /* --- UI Elements --- */
         .menu-btn {
             position: fixed;
             top: 20px;
@@ -40,266 +73,292 @@
             cursor: pointer;
             background: none;
             border: none;
-            color: white;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.5);
-            transition: transform 0.3s;
+            color: var(--text-color);
+            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5));
+            transition: transform 0.2s;
         }
-        
-        .menu-btn:hover {
-            transform: scale(1.1);
-        }
+        .menu-btn:active { transform: scale(0.9); }
 
-        /* --- Panel Boczny --- */
+        /* --- Sidebar --- */
         .sidebar {
             height: 100%;
-            width: 250px;
+            width: 280px;
             position: fixed;
             z-index: 99;
             top: 0;
-            left: -250px;
-            background-color: #111;
-            overflow-x: hidden;
-            transition: 0.5s;
+            left: -280px;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             padding-top: 80px;
-            box-shadow: 2px 0 15px rgba(0,0,0,0.5);
+            border-right: 1px solid #333;
+            box-shadow: 5px 0 25px rgba(0,0,0,0.5);
         }
 
-        .sidebar.open {
-            left: 0;
-        }
+        .sidebar.open { left: 0; }
 
-        .sidebar a {
-            padding: 15px 25px;
+        .sidebar-item {
+            padding: 20px 30px;
             text-decoration: none;
-            font-size: 1.5rem;
-            color: #818181;
-            display: block;
+            font-size: 1.2rem;
+            color: #aaa;
+            display: flex;
+            align-items: center;
+            gap: 15px;
             transition: 0.3s;
-            font-weight: bold;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
             text-transform: uppercase;
-            border-bottom: 1px solid #222;
+            font-weight: 600;
+            letter-spacing: 1px;
         }
 
-        .sidebar a:hover {
-            color: #f1f1f1;
-            background: rgba(255,255,255,0.05);
+        .sidebar-item:hover {
+            color: var(--accent-color);
+            background: rgba(255,255,255,0.03);
+            padding-left: 40px; /* Efekt przesunięcia */
         }
 
-        /* --- Sekcja Główna (Hero) --- */
+        /* --- Hero Section --- */
         .hero-section {
-            height: 100vh; /* Pełna wysokość ekranu */
-            width: 100%;
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             flex-direction: column;
+            position: relative;
         }
 
         .btn-prezes {
-            background: var(--gold-gradient);
-            color: #222;
-            padding: 25px 60px;
-            font-size: 2rem;
+            background: var(--accent-gradient);
+            color: #111;
+            padding: 25px 50px;
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
             font-weight: 900;
             text-decoration: none;
             border-radius: 50px;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), inset 0 0 10px rgba(255,255,255,0.4);
+            box-shadow: 0 0 25px var(--shadow-color), inset 0 0 10px rgba(255,255,255,0.4);
             text-transform: uppercase;
             letter-spacing: 3px;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 2px solid rgba(255,255,255,0.5);
             position: relative;
-            overflow: hidden;
-            border: 2px solid #fff5c3;
+            z-index: 1;
         }
 
         .btn-prezes:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 40px rgba(255, 215, 0, 0.8);
+            transform: scale(1.05) translateY(-5px);
+            box-shadow: 0 10px 40px var(--shadow-color);
         }
 
-        .scroll-hint {
+        .btn-prezes:active { transform: scale(0.95); }
+
+        /* --- Partnerzy (Bottom) --- */
+        .bottom-bar {
             position: absolute;
-            bottom: 20px;
-            font-size: 0.8rem;
-            opacity: 0.5;
-            animation: bounce 2s infinite;
-        }
-
-        /* --- Dolna Sekcja (Partnerzy i Easter Egg) --- */
-        .bottom-content {
-            padding: 50px 20px;
+            bottom: 30px;
+            width: 100%;
             text-align: center;
-            background: rgba(0,0,0,0.3);
-            min-height: 40vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 30px;
-        }
-
-        .partners-small {
-            opacity: 0.6;
+            opacity: 0.7;
             transition: opacity 0.3s;
         }
-        
-        .partners-small:hover {
-            opacity: 1;
-        }
+        .bottom-bar:hover { opacity: 1; }
 
-        .partners-label {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 8px;
-            display: block;
-            color: #aaa;
-        }
-
-        .btn-partner-mini {
-            background: #222;
-            border: 1px solid #333;
-            color: #00c853;
-            padding: 8px 20px;
-            font-size: 0.9rem;
-            text-decoration: none;
-            border-radius: 5px;
+        .partner-btn {
             display: inline-block;
-            transition: all 0.3s;
-        }
-
-        .btn-partner-mini:hover {
-            background: #00c853;
-            color: #000;
-            box-shadow: 0 0 10px rgba(0, 200, 83, 0.5);
-        }
-
-        /* Easter Egg */
-        .easter-egg-trigger {
-            font-size: 1.5rem;
-            cursor: pointer;
-            opacity: 0.3;
-            filter: grayscale(100%);
+            margin-top: 10px;
+            padding: 8px 16px;
+            background: rgba(0,0,0,0.5);
+            color: var(--accent-color);
+            border: 1px solid var(--border-color);
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.8rem;
             transition: 0.3s;
-            margin-top: 50px;
         }
+        .partner-btn:hover { background: var(--accent-color); color: #000; }
 
-        .easter-egg-trigger:hover {
-            opacity: 1;
-            filter: grayscale(0%);
-            transform: scale(1.2);
-        }
-
-        /* --- Modale (Sklep, Loading, Easter Egg) --- */
+        /* --- Modals (Shared Styles) --- */
         .overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
             z-index: 1000;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.4s;
-            backdrop-filter: blur(5px);
-        }
-
-        .overlay.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        .modal-box {
-            background: #1a1a1a;
-            padding: 30px;
-            border-radius: 20px;
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
-            border: 1px solid #333;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
-        }
-
-        /* Style Sklepu */
-        .shop-title {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-            color: #fff;
-            border-bottom: 2px solid #333;
-            padding-bottom: 10px;
-        }
-
-        .sub-option {
-            background: #2a2a2a;
-            margin: 10px 0;
-            padding: 15px;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: 0.3s;
-            border: 1px solid transparent;
+            transition: opacity 0.3s ease;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
         }
 
-        .sub-option:hover {
+        .overlay.active { opacity: 1; pointer-events: all; }
+
+        .modal-box {
+            background: #1a1a1a;
+            width: 90%;
+            max-width: 400px;
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 0 50px rgba(0,0,0,0.8);
+            text-align: center;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+
+        .overlay.active .modal-box { transform: translateY(0); }
+
+        .modal-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--text-color);
+            border-bottom: 1px solid #333;
+            padding-bottom: 15px;
+            text-transform: uppercase;
+            font-weight: 900;
+            letter-spacing: 1px;
+        }
+
+        .close-btn {
             background: #333;
-            border-color: gold;
+            color: #fff;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 8px;
+            margin-top: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+        .close-btn:hover { background: #444; }
+
+        /* --- Shop Elements --- */
+        .shop-option {
+            background: rgba(255,255,255,0.05);
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid transparent;
+            transition: 0.3s;
+        }
+
+        .shop-option:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: var(--accent-color);
             transform: translateX(5px);
         }
 
-        .sub-price {
-            font-weight: bold;
-            color: gold;
+        .price-tag { color: var(--accent-color); font-weight: bold; }
+
+        /* --- Settings Elements --- */
+        .theme-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
         }
 
-        /* Loading Screen */
-        .loader {
-            border: 5px solid #333;
-            border-top: 5px solid gold;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px auto;
+        .theme-btn {
+            padding: 15px;
+            border: 1px solid #444;
+            border-radius: 10px;
+            background: #222;
+            color: #fff;
+            cursor: pointer;
+            transition: 0.3s;
         }
+
+        .theme-btn:hover, .theme-btn.active {
+            border-color: var(--accent-color);
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 10px var(--shadow-color);
+        }
+
+        /* --- BLIK Modal --- */
+        .blik-input-container {
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .blik-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 2rem;
+            text-align: center;
+            letter-spacing: 5px;
+            background: #111;
+            border: 2px solid #333;
+            border-radius: 10px;
+            color: var(--text-color);
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .blik-input:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 15px var(--shadow-color);
+        }
+
+        .blik-logo {
+            font-weight: 900;
+            font-style: italic;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        .confirm-btn {
+            background: var(--accent-gradient);
+            color: #000;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            opacity: 0.5;
+            pointer-events: none;
+            transition: 0.3s;
+        }
+
+        .confirm-btn.ready { opacity: 1; pointer-events: all; }
+        .confirm-btn:active { transform: scale(0.98); }
+
+        .error-msg {
+            color: #ff4444;
+            font-size: 0.8rem;
+            margin-top: 10px;
+            min-height: 1.2em;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        /* --- Loading Screen --- */
+        .loader {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(255,255,255,0.1);
+            border-top: 5px solid var(--accent-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
 
         .loading-text {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             letter-spacing: 2px;
-            animation: pulse 1s infinite;
+            animation: pulse 1.5s infinite ease-in-out;
         }
-
-        /* Easter Egg Styles */
-        .emoji-display {
-            font-size: 6rem;
-            margin: 20px 0;
-        }
-        .result-msg {
-            color: #ff4444;
-            font-weight: bold;
-            font-size: 1.2rem;
-            margin-top: 10px;
-        }
-
-        /* Close Button */
-        .close-btn {
-            background: #444;
-            color: white;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 5px;
-            margin-top: 20px;
-            cursor: pointer;
-        }
-
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-        @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
+        @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
 
     </style>
 </head>
@@ -308,123 +367,174 @@
     <button class="menu-btn" onclick="toggleSidebar()">☰</button>
 
     <div id="sidebar" class="sidebar">
-        <a href="#" onclick="openShop()">SKLEP 🛒</a>
+        <div class="sidebar-item" onclick="openShop()">
+            <span>🛒</span> Sklep Premium
+        </div>
+        <div class="sidebar-item" onclick="openSettings()">
+            <span>⚙️</span> Ustawienia
+        </div>
     </div>
 
     <div class="hero-section">
         <a href="https://youtube.com/shorts/gRMtvqN-x2Q?si=QAnHWfDZkNgRgcKB" target="_blank" class="btn-prezes">
             PREZES 👑
         </a>
-        <div class="scroll-hint">▼ Przewiń w dół ▼</div>
-    </div>
 
-    <div class="bottom-content">
-        <div class="partners-small">
-            <span class="partners-label">nasi partnerzy</span>
-            <a href="https://4nv75.casino/pl" target="_blank" class="btn-partner-mini">NV Casino</a>
-        </div>
-
-        <div class="easter-egg-trigger" id="foodTrigger" title="Losowanie">
-            🍽️ Co zjesz?
+        <div class="bottom-bar">
+            <div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Współpraca</div>
+            <a href="#" class="partner-btn">NV Partners Group</a>
         </div>
     </div>
 
     <div class="overlay" id="shopModal">
         <div class="modal-box">
-            <div class="shop-title">💎 PREMIUM 💎</div>
-            <p style="font-size:0.9rem; color:#aaa; margin-bottom:20px;">Wybierz plan subskrypcji:</p>
+            <div class="modal-title">Wybierz Plan 💎</div>
+            <p style="color: #aaa; font-size: 0.9rem; margin-bottom: 20px;">Odblokuj dostęp do strefy VIP.</p>
             
-            <div class="sub-option" onclick="buySubscription()">
+            <div class="shop-option" onclick="startPayment(29.99)">
                 <span>1 Miesiąc</span>
-                <span class="sub-price">29.99 zł</span>
+                <span class="price-tag">29.99 PLN</span>
             </div>
-            <div class="sub-option" onclick="buySubscription()">
+            <div class="shop-option" onclick="startPayment(44.99)">
                 <span>2 Miesiące</span>
-                <span class="sub-price">44.99 zł</span>
+                <span class="price-tag">44.99 PLN</span>
             </div>
-            <div class="sub-option" onclick="buySubscription()">
+            <div class="shop-option" onclick="startPayment(59.99)">
                 <span>3 Miesiące</span>
-                <span class="sub-price">59.99 zł</span>
+                <span class="price-tag">59.99 PLN</span>
             </div>
 
-            <button class="close-btn" onclick="closeShop()">Anuluj</button>
+            <button class="close-btn" onclick="closeAllModals()">Anuluj</button>
         </div>
     </div>
 
-    <div class="overlay" id="loadingModal" style="z-index: 2000;">
+    <div class="overlay" id="settingsModal">
+        <div class="modal-box">
+            <div class="modal-title">Wygląd Aplikacji</div>
+            <p style="color: #aaa; font-size: 0.9rem; margin-bottom: 20px;">Wybierz swój styl:</p>
+            
+            <div class="theme-grid">
+                <button class="theme-btn active" onclick="setTheme('default', this)">Prezes 👑</button>
+                <button class="theme-btn" onclick="setTheme('cyberpunk', this)">Cyber 🤖</button>
+                <button class="theme-btn" onclick="setTheme('matrix', this)">Hacker 💻</button>
+                <button class="theme-btn" onclick="setTheme('crimson', this)">Krwawy 🩸</button>
+            </div>
+
+            <button class="close-btn" onclick="closeAllModals()">Zamknij</button>
+        </div>
+    </div>
+
+    <div class="overlay" id="blikModal" style="z-index: 1001;">
+        <div class="modal-box">
+            <div class="blik-logo">BLIK Płatność</div>
+            <p style="font-size: 0.9rem; margin-bottom: 20px;">Wygeneruj kod w aplikacji bankowej i wpisz go poniżej.</p>
+
+            <div class="blik-input-container">
+                <input type="tel" id="blikCode" class="blik-input" maxlength="6" placeholder="000000" oninput="validateBlik(this)">
+            </div>
+            
+            <div id="blikError" class="error-msg">Kod musi składać się z 6 cyfr</div>
+
+            <button id="blikConfirm" class="confirm-btn" onclick="processBlik()">POTWIERDŹ PŁATNOŚĆ</button>
+            <button class="close-btn" onclick="closeAllModals()" style="background: transparent; border: 1px solid #333; margin-top: 10px;">Anuluj</button>
+        </div>
+    </div>
+
+    <div class="overlay" id="loadingModal" style="z-index: 2000; background: rgba(0,0,0,0.95);">
         <div class="modal-box" style="background: transparent; box-shadow: none; border: none;">
             <div class="loader"></div>
-            <div class="loading-text">PRZETWARZANIE PŁATNOŚCI...</div>
-        </div>
-    </div>
-
-    <div class="overlay" id="lotteryOverlay">
-        <div class="modal-box">
-            <div id="lotteryTitle">Losowanie posiłku...</div>
-            <div class="emoji-display" id="lotteryEmoji">🍔</div>
-            <div class="result-msg" id="resultMsg" style="display:none;">Dzisiaj jesz to dziecko. :)))</div>
-            <button class="close-btn" id="eggCloseBtn" style="display:none;" onclick="resetLottery()">Zamknij</button>
+            <div class="loading-text">WERYFIKACJA PŁATNOŚCI...</div>
+            <div style="font-size: 0.8rem; color: #888; margin-top: 10px;">Proszę nie zamykać okna.</div>
         </div>
     </div>
 
     <script>
-        // --- Obsługa Menu ---
+        // --- Zarządzanie Stanem i UI ---
         function toggleSidebar() {
             document.getElementById("sidebar").classList.toggle("open");
         }
 
-        // --- Obsługa Sklepu ---
+        function closeAllModals() {
+            document.querySelectorAll('.overlay').forEach(modal => modal.classList.remove('active'));
+            document.getElementById("sidebar").classList.remove("open");
+            // Reset BLIK input
+            document.getElementById('blikCode').value = '';
+            validateBlik({value: ''});
+        }
+
         function openShop() {
-            toggleSidebar(); // zamknij menu
+            closeAllModals(); // Zamyka sidebar i inne
             document.getElementById("shopModal").classList.add("active");
         }
 
-        function closeShop() {
-            document.getElementById("shopModal").classList.remove("active");
+        function openSettings() {
+            closeAllModals();
+            document.getElementById("settingsModal").classList.add("active");
         }
 
-        function buySubscription() {
-            closeShop();
+        // --- System Motywów ---
+        function setTheme(themeName, btnElement) {
+            // Ustawienie atrybutu
+            document.documentElement.setAttribute('data-theme', themeName);
+            
+            // Aktualizacja UI przycisków
+            document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
+            if(btnElement) btnElement.classList.add('active');
+        }
+
+        // --- Logika Płatności (BLIK) ---
+        function startPayment(amount) {
+            document.getElementById("shopModal").classList.remove("active");
+            document.getElementById("blikModal").classList.add("active");
+            // Focus na input dla UX (szczególnie mobile)
+            setTimeout(() => document.getElementById('blikCode').focus(), 100);
+        }
+
+        function validateBlik(input) {
+            // Pozwól tylko na cyfry
+            input.value = input.value.replace(/[^0-9]/g, '');
+            
+            const btn = document.getElementById('blikConfirm');
+            const error = document.getElementById('blikError');
+
+            if (input.value.length === 6) {
+                btn.classList.add('ready');
+                error.style.opacity = '0';
+            } else {
+                btn.classList.remove('ready');
+                if(input.value.length > 0) {
+                   // error.style.opacity = '1'; // Opcjonalnie pokazuj błąd w trakcie pisania
+                }
+            }
+        }
+
+        function processBlik() {
+            const code = document.getElementById('blikCode').value;
+            if (code.length !== 6) return;
+
+            // Zamknij BLIK, otwórz Loading
+            document.getElementById("blikModal").classList.remove("active");
             const loadingModal = document.getElementById("loadingModal");
             loadingModal.classList.add("active");
+            
+            const loadingText = loadingModal.querySelector('.loading-text');
+            
+            // Symulacja procesu
+            setTimeout(() => { loadingText.innerText = "ŁĄCZENIE Z BANKIEM..."; }, 2000);
+            setTimeout(() => { loadingText.innerText = "AUTORYZACJA..."; }, 4000);
+            setTimeout(() => { loadingText.innerText = "PŁATNOŚĆ PRZYJĘTA!"; loadingText.style.color = "#00ff00"; }, 6000);
 
-            // Czekaj 6 sekund i przekieruj
+            // Przekierowanie
             setTimeout(() => {
-                window.location.href = "https://puzzlefactory.com/pl/puzzle-ludzie/226199-hejka-tu-lenka-puzzle#8x11";
-            }, 6000);
+                window.location.href = "https://youtu.be/CqfPGNM0w6s?si=EFau-QZJ2wrqU4vd";
+            }, 7500);
         }
 
-        // --- Obsługa Easter Egg (Jedzenie) ---
-        const trigger = document.getElementById('foodTrigger');
-        const overlay = document.getElementById('lotteryOverlay');
-        const emojiDisplay = document.getElementById('lotteryEmoji');
-        const resultMsg = document.getElementById('resultMsg');
-        const eggCloseBtn = document.getElementById('eggCloseBtn');
-        const foodEmojis = ['🍕', '🍔', '🍟', '🌭', '🍿', '🥓', '🥚', '🥞', '🥐', '🥯', '🥖', '🥨', '🧀', '🥗'];
-        const finalEmoji = '👶🏿';
-        let interval;
-
-        trigger.addEventListener('click', () => {
-            overlay.classList.add('active');
-            resultMsg.style.display = 'none';
-            eggCloseBtn.style.display = 'none';
-            let startTime = Date.now();
-            
-            interval = setInterval(() => {
-                const randomFood = foodEmojis[Math.floor(Math.random() * foodEmojis.length)];
-                emojiDisplay.innerText = randomFood;
-
-                if (Date.now() - startTime >= 5000) { // 5 sekund
-                    clearInterval(interval);
-                    emojiDisplay.innerText = finalEmoji;
-                    resultMsg.style.display = 'block';
-                    eggCloseBtn.style.display = 'inline-block';
-                }
-            }, 100);
-        });
-
-        function resetLottery() {
-            overlay.classList.remove('active');
+        // Kliknięcie poza modalem zamyka go (opcjonalne, dla wygody)
+        window.onclick = function(event) {
+            if (event.target.classList.contains('overlay') && !event.target.id.includes('loading')) {
+                closeAllModals();
+            }
         }
     </script>
 
