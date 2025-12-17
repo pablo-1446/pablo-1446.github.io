@@ -3,157 +3,209 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wideo i Partnerzy</title>
+    <title>Strefa Prezesa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;600;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --yt-color: #ff0099;
-            --partner-color: #00c853; /* Casino green */
-            --bg-gradient: linear-gradient(180deg, #101010 0%, #232323 100%);
+            --gold-gradient: linear-gradient(135deg, #FFD700 0%, #FDB931 100%);
             --text-color: #ffffff;
-            --glass-bg: rgba(30, 30, 30, 0.85);
+            --glass-bg: rgba(20, 20, 20, 0.9);
+            --modal-bg: rgba(30, 30, 30, 0.95);
         }
 
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Inter', 'Segoe UI', sans-serif;
-            background: var(--bg-gradient);
+            font-family: 'Inter', sans-serif;
             color: var(--text-color);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
-            min-height: 100vh;
-            overflow: hidden;
+            overflow-x: hidden;
+            background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #1a0b2e);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
         }
 
-        /* --- Górna Sekcja --- */
-        .top-section {
-            width: 100%;
-            max-width: 400px;
-            padding: 40px 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-grow: 1; /* Wypycha dół */
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
-        .btn {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            padding: 22px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            text-decoration: none;
-            color: white;
-            border-radius: 18px;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        /* --- Menu Hamburger --- */
+        .menu-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            font-size: 2rem;
             cursor: pointer;
+            background: none;
             border: none;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn:active {
-            transform: scale(0.96);
-        }
-
-        .btn-yt {
-            background: linear-gradient(135deg, #ff0000 0%, #990000 100%);
-            border: 1px solid #ff4d4d;
+            color: white;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+            transition: transform 0.3s;
         }
         
-        .btn-yt::before {
-            content: '▶';
-            margin-right: 12px;
-            font-size: 1.2em;
+        .menu-btn:hover {
+            transform: scale(1.1);
         }
 
-        /* --- Dolna Sekcja (Partnerzy) --- */
-        .footer-section {
+        /* --- Panel Boczny --- */
+        .sidebar {
+            height: 100%;
+            width: 250px;
+            position: fixed;
+            z-index: 99;
+            top: 0;
+            left: -250px;
+            background-color: #111;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 80px;
+            box-shadow: 2px 0 15px rgba(0,0,0,0.5);
+        }
+
+        .sidebar.open {
+            left: 0;
+        }
+
+        .sidebar a {
+            padding: 15px 25px;
+            text-decoration: none;
+            font-size: 1.5rem;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+            font-weight: bold;
+            text-transform: uppercase;
+            border-bottom: 1px solid #222;
+        }
+
+        .sidebar a:hover {
+            color: #f1f1f1;
+            background: rgba(255,255,255,0.05);
+        }
+
+        /* --- Sekcja Główna (Hero) --- */
+        .hero-section {
+            height: 100vh; /* Pełna wysokość ekranu */
             width: 100%;
-            max-width: 500px;
-            padding: 25px 20px 40px 20px; /* Więcej paddingu na dole */
-            text-align: center;
-            background: var(--glass-bg);
-            backdrop-filter: blur(15px);
-            border-top-left-radius: 30px;
-            border-top-right-radius: 30px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .btn-prezes {
+            background: var(--gold-gradient);
+            color: #222;
+            padding: 25px 60px;
+            font-size: 2rem;
+            font-weight: 900;
+            text-decoration: none;
+            border-radius: 50px;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), inset 0 0 10px rgba(255,255,255,0.4);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            transition: all 0.3s ease;
             position: relative;
+            overflow: hidden;
+            border: 2px solid #fff5c3;
+        }
+
+        .btn-prezes:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.8);
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 20px;
+            font-size: 0.8rem;
+            opacity: 0.5;
+            animation: bounce 2s infinite;
+        }
+
+        /* --- Dolna Sekcja (Partnerzy i Easter Egg) --- */
+        .bottom-content {
+            padding: 50px 20px;
+            text-align: center;
+            background: rgba(0,0,0,0.3);
+            min-height: 40vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .partners-small {
+            opacity: 0.6;
+            transition: opacity 0.3s;
+        }
+        
+        .partners-small:hover {
+            opacity: 1;
         }
 
         .partners-label {
-            font-size: 0.8rem;
-            color: #aaa;
+            font-size: 0.7rem;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 15px;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
             display: block;
-            font-weight: 600;
+            color: #aaa;
         }
 
-        .btn-partner {
-            background: linear-gradient(135deg, #00b09b, #96c93d);
-            margin-bottom: 25px;
-            font-size: 1.2rem;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
-            animation: glow 2s infinite alternate;
-        }
-
-        @keyframes glow {
-            from { box-shadow: 0 0 10px #00b09b; }
-            to { box-shadow: 0 0 20px #96c93d; }
-        }
-
-        /* --- Easter Egg Trigger --- */
-        .easter-egg-container {
-            margin-top: 10px;
-        }
-
-        .easter-egg-trigger {
-            font-size: 2rem;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        .btn-partner-mini {
+            background: #222;
+            border: 1px solid #333;
+            color: #00c853;
+            padding: 8px 20px;
+            font-size: 0.9rem;
+            text-decoration: none;
+            border-radius: 5px;
             display: inline-block;
-            opacity: 0.6;
-            filter: grayscale(80%);
+            transition: all 0.3s;
+        }
+
+        .btn-partner-mini:hover {
+            background: #00c853;
+            color: #000;
+            box-shadow: 0 0 10px rgba(0, 200, 83, 0.5);
+        }
+
+        /* Easter Egg */
+        .easter-egg-trigger {
+            font-size: 1.5rem;
+            cursor: pointer;
+            opacity: 0.3;
+            filter: grayscale(100%);
+            transition: 0.3s;
+            margin-top: 50px;
         }
 
         .easter-egg-trigger:hover {
-            transform: scale(1.3) rotate(15deg);
             opacity: 1;
             filter: grayscale(0%);
+            transform: scale(1.2);
         }
 
-        .easter-egg-hint {
-            display: block;
-            font-size: 0.7rem;
-            color: #555;
-            margin-top: 5px;
-        }
-
-        /* --- Modal (Losowanie) --- */
+        /* --- Modale (Sklep, Loading, Easter Egg) --- */
         .overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.95);
+            background: rgba(0, 0, 0, 0.9);
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 9999;
+            z-index: 1000;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.4s ease;
+            transition: opacity 0.4s;
+            backdrop-filter: blur(5px);
         }
 
         .overlay.active {
@@ -161,173 +213,218 @@
             pointer-events: all;
         }
 
-        .modal-content {
-            text-align: center;
-            color: white;
+        .modal-box {
+            background: #1a1a1a;
+            padding: 30px;
+            border-radius: 20px;
             width: 90%;
             max-width: 400px;
+            text-align: center;
+            border: 1px solid #333;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
         }
 
-        .title-text {
+        /* Style Sklepu */
+        .shop-title {
             font-size: 1.5rem;
-            font-weight: 300;
             margin-bottom: 20px;
-            color: #ddd;
-        }
-
-        .emoji-display {
-            font-size: 8rem;
-            margin: 20px 0;
-            height: 150px;
-            line-height: 150px;
-            animation: bounce 0.5s infinite alternate;
-        }
-
-        .result-msg {
-            font-size: 2rem;
-            font-weight: 800;
-            color: #ffcc00;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.5s ease;
-        }
-
-        .result-msg.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .close-btn {
-            background: transparent;
-            border: 2px solid #555;
-            color: #aaa;
-            padding: 10px 30px;
-            border-radius: 50px;
-            margin-top: 30px;
-            cursor: pointer;
-            font-size: 1rem;
-            display: none; /* Ukryte podczas losowania */
-        }
-        
-        .close-btn:hover {
-            border-color: #fff;
             color: #fff;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
         }
 
-        @keyframes bounce {
-            from { transform: scale(0.9); }
-            to { transform: scale(1.0); }
+        .sub-option {
+            background: #2a2a2a;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+            border: 1px solid transparent;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        
+
+        .sub-option:hover {
+            background: #333;
+            border-color: gold;
+            transform: translateX(5px);
+        }
+
+        .sub-price {
+            font-weight: bold;
+            color: gold;
+        }
+
+        /* Loading Screen */
+        .loader {
+            border: 5px solid #333;
+            border-top: 5px solid gold;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px auto;
+        }
+
+        .loading-text {
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            animation: pulse 1s infinite;
+        }
+
+        /* Easter Egg Styles */
+        .emoji-display {
+            font-size: 6rem;
+            margin: 20px 0;
+        }
+        .result-msg {
+            color: #ff4444;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-top: 10px;
+        }
+
+        /* Close Button */
+        .close-btn {
+            background: #444;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
+
     </style>
 </head>
 <body>
 
-    <div class="top-section">
-        <a href="https://youtube.com/shorts/gRMtvqN-x2Q?si=QAnHWfDZkNgRgcKB" target="_blank" class="btn btn-yt">
-            Oglądaj Shorts
-        </a>
+    <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+
+    <div id="sidebar" class="sidebar">
+        <a href="#" onclick="openShop()">SKLEP 🛒</a>
     </div>
 
-    <div class="footer-section">
-        <span class="partners-label">Nasi Partnerzy</span>
-        
-        <a href="https://4nv75.casino/pl" target="_blank" class="btn btn-partner">NV Casino ™</a>
+    <div class="hero-section">
+        <a href="https://youtube.com/shorts/gRMtvqN-x2Q?si=QAnHWfDZkNgRgcKB" target="_blank" class="btn-prezes">
+            PREZES 👑
+        </a>
+        <div class="scroll-hint">▼ Przewiń w dół ▼</div>
+    </div>
 
-        <div class="easter-egg-container">
-            <div class="easter-egg-trigger" id="foodTrigger" title="Co zjesz?">
-                🍽️
+    <div class="bottom-content">
+        <div class="partners-small">
+            <span class="partners-label">nasi partnerzy</span>
+            <a href="https://4nv75.casino/pl" target="_blank" class="btn-partner-mini">NV Casino</a>
+        </div>
+
+        <div class="easter-egg-trigger" id="foodTrigger" title="Losowanie">
+            🍽️ Co zjesz?
+        </div>
+    </div>
+
+    <div class="overlay" id="shopModal">
+        <div class="modal-box">
+            <div class="shop-title">💎 PREMIUM 💎</div>
+            <p style="font-size:0.9rem; color:#aaa; margin-bottom:20px;">Wybierz plan subskrypcji:</p>
+            
+            <div class="sub-option" onclick="buySubscription()">
+                <span>1 Miesiąc</span>
+                <span class="sub-price">29.99 zł</span>
             </div>
-            <span class="easter-egg-hint">Co dziś na obiad?</span>
+            <div class="sub-option" onclick="buySubscription()">
+                <span>2 Miesiące</span>
+                <span class="sub-price">44.99 zł</span>
+            </div>
+            <div class="sub-option" onclick="buySubscription()">
+                <span>3 Miesiące</span>
+                <span class="sub-price">59.99 zł</span>
+            </div>
+
+            <button class="close-btn" onclick="closeShop()">Anuluj</button>
+        </div>
+    </div>
+
+    <div class="overlay" id="loadingModal" style="z-index: 2000;">
+        <div class="modal-box" style="background: transparent; box-shadow: none; border: none;">
+            <div class="loader"></div>
+            <div class="loading-text">PRZETWARZANIE PŁATNOŚCI...</div>
         </div>
     </div>
 
     <div class="overlay" id="lotteryOverlay">
-        <div class="modal-content">
-            <div class="title-text" id="lotteryTitle">Losowanie posiłku...</div>
-            
+        <div class="modal-box">
+            <div id="lotteryTitle">Losowanie posiłku...</div>
             <div class="emoji-display" id="lotteryEmoji">🍔</div>
-            
-            <div class="result-msg" id="resultMsg">Dzisiaj jesz to dziecko. :)))</div>
-            
-            <button class="close-btn" id="closeBtn" onclick="resetLottery()">Zamknij</button>
+            <div class="result-msg" id="resultMsg" style="display:none;">Dzisiaj jesz to dziecko. :)))</div>
+            <button class="close-btn" id="eggCloseBtn" style="display:none;" onclick="resetLottery()">Zamknij</button>
         </div>
     </div>
 
     <script>
+        // --- Obsługa Menu ---
+        function toggleSidebar() {
+            document.getElementById("sidebar").classList.toggle("open");
+        }
+
+        // --- Obsługa Sklepu ---
+        function openShop() {
+            toggleSidebar(); // zamknij menu
+            document.getElementById("shopModal").classList.add("active");
+        }
+
+        function closeShop() {
+            document.getElementById("shopModal").classList.remove("active");
+        }
+
+        function buySubscription() {
+            closeShop();
+            const loadingModal = document.getElementById("loadingModal");
+            loadingModal.classList.add("active");
+
+            // Czekaj 6 sekund i przekieruj
+            setTimeout(() => {
+                window.location.href = "https://puzzlefactory.com/pl/puzzle-ludzie/226199-hejka-tu-lenka-puzzle#8x11";
+            }, 6000);
+        }
+
+        // --- Obsługa Easter Egg (Jedzenie) ---
         const trigger = document.getElementById('foodTrigger');
         const overlay = document.getElementById('lotteryOverlay');
         const emojiDisplay = document.getElementById('lotteryEmoji');
-        const titleText = document.getElementById('lotteryTitle');
         const resultMsg = document.getElementById('resultMsg');
-        const closeBtn = document.getElementById('closeBtn');
-
-        // Jedzenie do losowania (zmyłka)
-        const foodEmojis = ['🍕', '🍔', '🍟', '🌭', '🍿', '🥓', '🥚', '🥞', '🥐', '🥯', '🥖', '🥨', '🧀', '🥗', '🥩', '🥪', '🌮', '🌯', '🍜', '🍝'];
-        
-        // Wynik końcowy (zawsze ten sam)
+        const eggCloseBtn = document.getElementById('eggCloseBtn');
+        const foodEmojis = ['🍕', '🍔', '🍟', '🌭', '🍿', '🥓', '🥚', '🥞', '🥐', '🥯', '🥖', '🥨', '🧀', '🥗'];
         const finalEmoji = '👶🏿';
-
         let interval;
-        const duration = 5000; // 5 sekund
 
         trigger.addEventListener('click', () => {
-            startFoodLottery();
-        });
-
-        function startFoodLottery() {
-            // Reset widoku
             overlay.classList.add('active');
-            titleText.innerText = "Losowanie co zjesz...";
-            resultMsg.classList.remove('show');
-            closeBtn.style.display = 'none';
-            emojiDisplay.style.animation = "bounce 0.1s infinite alternate"; // Szybkie wibracje
-            
+            resultMsg.style.display = 'none';
+            eggCloseBtn.style.display = 'none';
             let startTime = Date.now();
-
-            // Pętla losowania
+            
             interval = setInterval(() => {
                 const randomFood = foodEmojis[Math.floor(Math.random() * foodEmojis.length)];
                 emojiDisplay.innerText = randomFood;
 
-                // Koniec losowania
-                if (Date.now() - startTime >= duration) {
-                    endFoodLottery();
+                if (Date.now() - startTime >= 5000) { // 5 sekund
+                    clearInterval(interval);
+                    emojiDisplay.innerText = finalEmoji;
+                    resultMsg.style.display = 'block';
+                    eggCloseBtn.style.display = 'inline-block';
                 }
-            }, 80); // Bardzo szybka zmiana (co 80ms)
-        }
-
-        function endFoodLottery() {
-            clearInterval(interval);
-            
-            // Ustawienie wyniku
-            emojiDisplay.innerText = finalEmoji;
-            emojiDisplay.style.animation = "none"; // Stop wibracji
-            
-            // Efekt powiększenia wyniku
-            emojiDisplay.style.transform = "scale(0.1)";
-            setTimeout(() => {
-                emojiDisplay.style.transition = "transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
-                emojiDisplay.style.transform = "scale(1.0)";
-            }, 50);
-
-            // Zmiana tekstu
-            titleText.innerText = "Twoje dzisiejsze danie:";
-            
-            // Pokaż napis "Smacznego" i przycisk
-            setTimeout(() => {
-                resultMsg.classList.add('show');
-                closeBtn.style.display = 'inline-block';
-            }, 500);
-        }
+            }, 100);
+        });
 
         function resetLottery() {
             overlay.classList.remove('active');
-            // Reset stylów dla następnego razu
-            setTimeout(() => {
-                emojiDisplay.style.transform = "scale(1)";
-                emojiDisplay.style.transition = "none";
-            }, 500);
         }
     </script>
 
