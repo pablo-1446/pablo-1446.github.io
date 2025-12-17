@@ -3,135 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>::: KIFFLOM! The Epsilon Program - Wejście do Prawdy :::</title>
+    <title>Git strona</title>
     
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
     <style>
-        /* Stylistyka a'la Wczesne 2000s - Jaskrawe kolory i brak umiaru */
         body {
-            background-color: #000000; /* Ciemne tło */
-            color: #FFFFFF;
-            /* Zmieniona czcionka na bardziej typową i czytelną dla epoki 2000s */
-            font-family: 'Verdana', 'Trebuchet MS', sans-serif; 
-            margin: 0;
+            background-color: #000000; /* Tło */
+            color: #FFFFFF; /* Tekst */
+            font-family: 'JetBrains Mono', monospace; /* Czcionka */
+            margin: 0; /* Usunięcie domyślnych marginesów */
             padding: 0;
-            text-align: center;
         }
 
-        .container {
-            width: 90%;
-            max-width: 800px;
-            margin: 20px auto;
-            border: 8px ridge #FF00FF; /* Jaskrawe, fioletowe obramowanie */
-            background-color: #008000; /* Zielony jak neon */
-            padding: 25px;
-            box-shadow: 10px 10px 0px rgba(255, 255, 0, 0.8); /* Żółty cień dla maksymalnego kontrastu */
-            text-align: center;
+        /* Styl dla górnej belki */
+        .header {
+            background-color: #707070; /* Kolor belki */
+            text-align: center; /* Wyśrodkowanie napisu */
+            padding: 15px 0; /* Odsunięcie */
+            font-size: 1.2em; /* Lekkie powiększenie tekstu */
         }
 
-        /* Pulsjący Nagłówek (Usunięto skalowanie, by poprawić responsywność) */
-        .pulsing-header {
-            font-size: 32px;
-            font-weight: 900;
-            text-transform: uppercase;
-            color: #FFFF00; /* Jaskrawa żółć */
-            text-shadow: 3px 3px 5px #FF0000; /* Czerwony cień */
-            margin-bottom: 25px;
-            padding: 10px 0;
-            border: 3px dashed #FF0000;
-            animation: pulse-color 1.5s infinite alternate; /* Animacja pulsowania kolorem */
-            /* Zapewnienie, że element nie rusza się fizycznie */
-            transform: scale(1.0); 
-            transition: none;
+        /* Styl dla przycisków i linków */
+        .button {
+            background-color: #707070; /* Kolor przycisków */
+            color: #FFFFFF; /* Kolor tekstu przycisków */
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px; /* Zaokrąglenie */
+            cursor: pointer;
+            display: block; /* Ustawienie elementu na blokowy */
+            width: fit-content; /* Szerokość dopasowana do treści */
+            margin: 15px auto; /* Wyśrodkowanie przycisku (góra/dół 15px, auto lewo/prawo) */
+            text-decoration: none; /* Usunięcie podkreślenia linków */
+            transition: background-color 0.3s; /* Efekt najazdu */
         }
 
-        /* Zmiana animacji na samą zmianę koloru */
-        @keyframes pulse-color {
-            0% { color: #FFFF00; text-shadow: 3px 3px 5px #FF0000; }
-            100% { color: #00FFFF; text-shadow: 3px 3px 5px #0000FF; } 
+        .button:hover {
+            background-color: #8c8c8c; /* Lekkie ściemnienie/rozjaśnienie przy najechaniu */
         }
 
-        .main-text {
-            font-size: 24px;
-            font-weight: bold;
-            color: #FFFFFF;
-            margin-bottom: 40px;
-        }
-        
-        /* Stylizacja Linku - Przycisku */
-        .god-link a {
-            display: inline-block;
-            background-color: #FF0000; /* Czerwień */
-            color: #FFFF00; /* Żółć */
-            text-decoration: none;
-            padding: 15px 30px;
-            border: 5px solid #FF00FF;
-            font-size: 28px;
-            font-weight: bolder;
-            transition: background-color 0.1s;
-        }
-
-        .god-link a:hover {
-            background-color: #FF6600; /* Kolor pomarańczowy po najechaniu */
-            border-color: #00FFFF; /* Turkus po najechaniu */
-        }
-
-        /* Sekcja stopki (footer) */
-        .footer-section {
-            margin-top: 40px;
-            padding-top: 15px;
-            font-size: 14px;
-            color: #AAAAAA;
-            text-align: center;
-        }
-
-        .copyright {
-            font-size: 16px;
-            font-family: 'Courier New', Courier, monospace;
-            color: #00FFFF; /* Turkus */
-            margin-top: 10px;
-        }
-        
-        /* Dodanie stylizacji dla nazwy sekty */
-        .cult-name {
-            font-size: 20px;
-            font-weight: bold;
-            color: #00FFFF;
-            margin-top: 10px;
+        /* Teksty sekcji */
+        .section-text {
+            text-align: left; /* Tekst od lewej do prawej */
+            margin-left: 20px; /* Odsunięcie od krawędzi */
+            padding-top: 30px;
+            padding-bottom: 5px;
         }
     </style>
 </head>
 <body>
 
-    <div class="pulsing-header">
-        DOŁĄCZ DO NASZEJ SEKTY
+    <div class="header">
+        Git strona
     </div>
 
-    <div class="container">
-        
-        <p class="cult-name">The Epsilon Program - KIFFLOM!</p>
-        
-        <p class="main-text">
-            WITAJ W NASZEJ SEKCIE. JEŚLI CHCESZ ZOBACZYĆ <br>PRAWDZIWEGO BOGA, KLIKNIJ TUTAJ:
-        </p>
+    <div class="section-text">
+        Ciekawe filmy :)))
+    </div>
+    
+    <a href="WSTAW_TUTAJ_LINK_1" class="button">
+        Filmy
+    </a>
 
-        <div class="god-link">
-            <a href="https://youtube.com/shorts/gRMtvqN-x2Q?si=HeeYxdPODke3JmzY" target="_blank">
-                KLIKNIJ TUTAJ
-            </a>
-        </div>
-        
-        <p style="margin-top: 30px; font-size: 20px; color: #FFD700;">
-            Otwórz umysł na JEDYNE Prawdy, które otrzymasz w tym Wymiarze.
-        </p>
-
+    <div class="section-text">
+        Ciekawi ludzie
     </div>
 
-    <div class="footer-section">
-        <p>Tylko Bóg Epsilon Zna Prawdę. Nie Odchodź.</p>
-        <p class="copyright">
-            EPSILON COPYRIGHT (C) 2000
-        </p>
-    </div>
-
+    <a href="WSTAW_TUTAJ_LINK_2" class="button">
+        Lista
+    </a>
+    
 </body>
 </html>
