@@ -3,76 +3,257 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Git strona</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-
+    <title>Losowanie i Partnerzy</title>
     <style>
+        :root {
+            --primary-color: #ff0050; /* YouTube color vibe */
+            --secondary-color: #00e676; /* Partner color vibe */
+            --bg-gradient: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            --text-color: #ffffff;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+        }
+
         body {
-            background-color: #000000; /* Tło */
-            color: #FFFFFF; /* Tekst */
-            font-family: 'JetBrains Mono', monospace; /* Czcionka */
-            margin: 0; /* Usunięcie domyślnych marginesów */
+            margin: 0;
             padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 100vh;
+            overflow: hidden;
         }
 
-        /* Styl dla górnej belki */
-        .header {
-            background-color: #707070; /* Kolor belki */
-            text-align: center; /* Wyśrodkowanie napisu */
-            padding: 15px 0; /* Odsunięcie */
-            font-size: 1.2em; /* Lekkie powiększenie tekstu */
+        /* Główny kontener */
+        .container {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 50px;
         }
 
-        /* Styl dla przycisków i linków */
-        .button {
-            background-color: #707070; /* Kolor przycisków */
-            color: #FFFFFF; /* Kolor tekstu przycisków */
+        /* Stylizacja przycisków */
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
             border: none;
-            padding: 10px 20px;
-            border-radius: 20px; /* Zaokrąglenie */
             cursor: pointer;
-            display: block; /* Ustawienie elementu na blokowy */
-            width: fit-content; /* Szerokość dopasowana do treści */
-            margin: 15px auto; /* Wyśrodkowanie przycisku (góra/dół 15px, auto lewo/prawo) */
-            text-decoration: none; /* Usunięcie podkreślenia linków */
-            transition: background-color 0.3s; /* Efekt najazdu */
         }
 
-        .button:hover {
-            background-color: #8c8c8c; /* Lekkie ściemnienie/rozjaśnienie przy najechaniu */
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
         }
 
-        /* Teksty sekcji */
-        .section-text {
-            text-align: left; /* Tekst od lewej do prawej */
-            margin-left: 20px; /* Odsunięcie od krawędzi */
-            padding-top: 30px;
-            padding-bottom: 5px;
+        .btn:active {
+            transform: scale(0.98);
         }
+
+        /* Przycisk YouTube */
+        .btn-yt {
+            background: linear-gradient(45deg, #ff0000, #c40000);
+        }
+        
+        .btn-yt::before {
+            content: '▶';
+            margin-right: 10px;
+        }
+
+        /* Sekcja dolna */
+        .footer-section {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            text-align: center;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .partners-label {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        /* Przycisk Partnerów */
+        .btn-partner {
+            background: linear-gradient(45deg, #11998e, #38ef7d);
+            margin-bottom: 20px;
+        }
+
+        /* Easter Egg Trigger */
+        .easter-egg-trigger {
+            font-size: 2rem;
+            cursor: pointer;
+            transition: transform 0.5s;
+            display: inline-block;
+            filter: grayscale(100%);
+            opacity: 0.5;
+        }
+
+        .easter-egg-trigger:hover {
+            transform: rotate(20deg) scale(1.2);
+            filter: grayscale(0%);
+            opacity: 1;
+        }
+
+        /* Modal / Overlay */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-content {
+            text-align: center;
+            color: white;
+        }
+
+        .emoji-display {
+            font-size: 8rem;
+            margin: 20px 0;
+            animation: pulse 1s infinite;
+        }
+
+        .status-text {
+            font-size: 1.5rem;
+            font-weight: 300;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #f00;
+            animation: fall linear forwards;
+        }
+        
     </style>
 </head>
 <body>
 
-    <div class="header">
-        Git strona
+    <div class="container">
+        <a href="https://youtube.com/shorts/gRMtvqN-x2Q?si=QAnHWfDZkNgRgcKB" target="_blank" class="btn btn-yt">
+            Oglądaj Wideo
+        </a>
     </div>
 
-    <div class="section-text">
-        Ciekawe filmy :)))
-    </div>
-    
-    <a href="WSTAW_TUTAJ_LINK_1" class="button">
-        Filmy
-    </a>
+    <div class="footer-section">
+        <span class="partners-label">Nasi zaufani partnerzy</span>
+        
+        <a href="https://4nv75.casino/pl" target="_blank" class="btn btn-partner">
+            Odbierz Bonus 💰
+        </a>
 
-    <div class="section-text">
-        Ciekawi ludzie
+        <div class="easter-egg-trigger" id="eggTrigger" title="Kliknij na szczęście">
+            🎁
+        </div>
     </div>
 
-    <a href="WSTAW_TUTAJ_LINK_2" class="button">
-        Lista
-    </a>
-    
+    <div class="overlay" id="drawOverlay">
+        <div class="modal-content">
+            <div class="status-text" id="statusText">Trwa losowanie nagrody...</div>
+            <div class="emoji-display" id="emojiResult">🎲</div>
+            <button class="btn" style="background: #333; margin-top:20px; display:none;" id="closeBtn" onclick="location.reload()">Zamknij</button>
+        </div>
+    </div>
+
+    <script>
+        const trigger = document.getElementById('eggTrigger');
+        const overlay = document.getElementById('drawOverlay');
+        const emojiDisplay = document.getElementById('emojiResult');
+        const statusText = document.getElementById('statusText');
+        const closeBtn = document.getElementById('closeBtn');
+
+        // Pula emoji do animacji (dla zmyłki)
+        const randomEmojis = ['💰', '🍒', '💎', '7️⃣', '🎰', '🍋', '⭐', '🃏', '🎲', '🪙'];
+        const targetEmoji = '👶🏿'; // Docelowy wynik
+        const duration = 5000; // 5 sekund
+        let interval;
+
+        trigger.addEventListener('click', () => {
+            startDraw();
+        });
+
+        function startDraw() {
+            // Pokaż overlay
+            overlay.classList.add('active');
+            
+            let startTime = Date.now();
+            
+            // Szybkie zmienianie emoji (animacja losowania)
+            interval = setInterval(() => {
+                const randomIndex = Math.floor(Math.random() * randomEmojis.length);
+                emojiDisplay.innerText = randomEmojis[randomIndex];
+                
+                // Sprawdź czy minęło 5 sekund
+                if (Date.now() - startTime >= duration) {
+                    finishDraw();
+                }
+            }, 100); // Zmiana co 100ms
+        }
+
+        function finishDraw() {
+            clearInterval(interval);
+            
+            // Ustawienie ostatecznego wyniku
+            emojiDisplay.innerText = targetEmoji;
+            statusText.innerText = "Twój wylosowany wynik to:";
+            statusText.style.color = "#00e676";
+            statusText.style.fontWeight = "bold";
+            
+            // Efekt powiększenia
+            emojiDisplay.style.transform = "scale(1.5)";
+            emojiDisplay.style.transition = "transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
+            
+            // Pokaż przycisk zamknięcia
+            closeBtn.style.display = "block";
+        }
+    </script>
+
 </body>
 </html>
