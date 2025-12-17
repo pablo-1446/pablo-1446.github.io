@@ -8,6 +8,7 @@
     <style>
         /* --- Zmienne Motywów --- */
         :root {
+            /* Domyślny (Prezes) */
             --bg-gradient: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #1a0b2e);
             --accent-color: #FFD700;
             --accent-gradient: linear-gradient(135deg, #FFD700 0%, #FDB931 100%);
@@ -53,7 +54,7 @@
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
             height: 100vh;
-            overflow: hidden; 
+            overflow: hidden; /* Zapobiega przewijaniu tła przy otwartych modalach */
         }
 
         @keyframes gradientBG {
@@ -76,6 +77,7 @@
             filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5));
             transition: transform 0.2s;
         }
+        .menu-btn:active { transform: scale(0.9); }
 
         /* --- Sidebar --- */
         .sidebar {
@@ -90,6 +92,7 @@
             transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             padding-top: 80px;
             border-right: 1px solid #333;
+            box-shadow: 5px 0 25px rgba(0,0,0,0.5);
         }
 
         .sidebar.open { left: 0; }
@@ -107,6 +110,13 @@
             border-bottom: 1px solid rgba(255,255,255,0.05);
             text-transform: uppercase;
             font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .sidebar-item:hover {
+            color: var(--accent-color);
+            background: rgba(255,255,255,0.03);
+            padding-left: 40px; /* Efekt przesunięcia */
         }
 
         /* --- Hero Section --- */
@@ -127,13 +137,21 @@
             font-weight: 900;
             text-decoration: none;
             border-radius: 50px;
-            box-shadow: 0 0 25px var(--shadow-color);
+            box-shadow: 0 0 25px var(--shadow-color), inset 0 0 10px rgba(255,255,255,0.4);
             text-transform: uppercase;
             letter-spacing: 3px;
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             border: 2px solid rgba(255,255,255,0.5);
+            position: relative;
             z-index: 1;
         }
+
+        .btn-prezes:hover {
+            transform: scale(1.05) translateY(-5px);
+            box-shadow: 0 10px 40px var(--shadow-color);
+        }
+
+        .btn-prezes:active { transform: scale(0.95); }
 
         /* --- Partnerzy (Bottom) --- */
         .bottom-bar {
@@ -142,46 +160,68 @@
             width: 100%;
             text-align: center;
             opacity: 0.7;
-            transition: 0.3s;
+            transition: opacity 0.3s;
         }
+        .bottom-bar:hover { opacity: 1; }
 
+        /* Zoptymalizowany przycisk partnera (większe touch-area, responsywny) */
         .partner-btn {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
             margin-top: 10px;
-            padding: 12px 24px;
-            background: rgba(0,0,0,0.6);
+            padding: 12px 18px;
+            background: rgba(0,0,0,0.5);
             color: var(--accent-color);
             border: 1px solid var(--border-color);
             text-decoration: none;
             border-radius: 8px;
-            font-size: 0.9rem;
-            transition: 0.3s;
-            font-weight: bold;
+            font-size: 0.95rem;
+            transition: 0.18s;
+            min-height: 48px; /* minimalny touch target */
+            box-shadow: 0 4px 14px rgba(0,0,0,0.35);
         }
+        .partner-btn:hover { background: var(--accent-color); color: #000; transform: translateY(-2px); }
 
-        /* --- MOBILNA POPRAWKA DLA PRZYCISKU NV --- */
-        @media (max-width: 768px) {
-            .bottom-bar {
-                bottom: 80px; /* Wyżej na komórkach, żeby nie nachodził na paski nawigacji */
-                padding: 0 20px;
-            }
+        @media (max-width: 600px) {
             .partner-btn {
-                width: 80%; /* Szerszy przycisk na komórce dla łatwiejszego klikania */
-                font-size: 1rem;
-                padding: 15px;
+                width: 86%;
+                font-size: 1.05rem;
+                padding: 14px 20px;
+                border-radius: 12px;
+                min-height: 56px;
             }
+            .bottom-bar { bottom: 18px; }
         }
 
-        /* --- Modals & Rest --- */
+        /* Easter egg button style */
+        .easter-btn {
+            margin-top: 12px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px dashed #666;
+            background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+            color: #ddd;
+            cursor: pointer;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.18s;
+        }
+        .easter-btn:active { transform: scale(0.98); }
+        .easter-btn:hover { box-shadow: 0 6px 18px rgba(0,0,0,0.5); color: var(--accent-color); border-color: var(--accent-color); }
+
+        /* --- Modals (Shared Styles) --- */
         .overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
             z-index: 1000;
             opacity: 0;
             pointer-events: none;
-            transition: 0.3s;
+            transition: opacity 0.3s ease;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -190,20 +230,29 @@
         .overlay.active { opacity: 1; pointer-events: all; }
 
         .modal-box {
-            background: #151515;
+            background: #1a1a1a;
             width: 90%;
             max-width: 400px;
             padding: 30px;
             border-radius: 20px;
             border: 1px solid var(--border-color);
+            box-shadow: 0 0 50px rgba(0,0,0,0.8);
             text-align: center;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
         }
+
+        .overlay.active .modal-box { transform: translateY(0); }
 
         .modal-title {
             font-size: 1.5rem;
             margin-bottom: 20px;
+            color: var(--text-color);
+            border-bottom: 1px solid #333;
+            padding-bottom: 15px;
             text-transform: uppercase;
             font-weight: 900;
+            letter-spacing: 1px;
         }
 
         .close-btn {
@@ -215,8 +264,33 @@
             margin-top: 20px;
             cursor: pointer;
             font-weight: bold;
+            transition: 0.2s;
+        }
+        .close-btn:hover { background: #444; }
+
+        /* --- Shop Elements --- */
+        .shop-option {
+            background: rgba(255,255,255,0.05);
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid transparent;
+            transition: 0.3s;
         }
 
+        .shop-option:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: var(--accent-color);
+            transform: translateX(5px);
+        }
+
+        .price-tag { color: var(--accent-color); font-weight: bold; }
+
+        /* --- Settings Elements --- */
         .theme-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -230,43 +304,109 @@
             background: #222;
             color: #fff;
             cursor: pointer;
+            transition: 0.3s;
         }
 
-        .theme-btn.active { border-color: var(--accent-color); }
-
-        /* Easter Egg Styling */
-        .egg-btn {
-            grid-column: span 2;
-            margin-top: 15px;
-            background: #000;
-            color: #444;
-            border: 1px dashed #333;
-            font-size: 0.7rem;
-            cursor: pointer;
+        .theme-btn:hover, .theme-btn.active {
+            border-color: var(--accent-color);
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 10px var(--shadow-color);
         }
 
-        /* BLIK */
+        /* --- BLIK Modal --- */
+        .blik-input-container {
+            margin: 20px 0;
+            position: relative;
+        }
+
         .blik-input {
             width: 100%;
             padding: 15px;
             font-size: 2rem;
             text-align: center;
-            background: #000;
+            letter-spacing: 5px;
+            background: #111;
             border: 2px solid #333;
-            color: #fff;
             border-radius: 10px;
+            color: var(--text-color);
+            outline: none;
+            transition: 0.3s;
         }
 
+        .blik-input:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 15px var(--shadow-color);
+        }
+
+        .blik-logo {
+            font-weight: 900;
+            font-style: italic;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        .confirm-btn {
+            background: var(--accent-gradient);
+            color: #000;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            opacity: 0.5;
+            pointer-events: none;
+            transition: 0.3s;
+        }
+
+        .confirm-btn.ready { opacity: 1; pointer-events: all; }
+        .confirm-btn:active { transform: scale(0.98); }
+
+        .error-msg {
+            color: #ff4444;
+            font-size: 0.8rem;
+            margin-top: 10px;
+            min-height: 1.2em;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        /* --- Loading Screen --- */
         .loader {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #222;
-            border-top-color: var(--accent-color);
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(255,255,255,0.1);
+            border-top: 5px solid var(--accent-color);
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin: 0 auto 20px;
         }
+
         @keyframes spin { to { transform: rotate(360deg); } }
+
+        .loading-text {
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+        @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+
+        /* --- Easter Modal specific --- */
+        .easter-message {
+            font-size: 1.3rem;
+            font-weight: 900;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            color: var(--accent-color);
+        }
+        .countdown {
+            font-size: 1.1rem;
+            color: #ddd;
+            margin-bottom: 8px;
+        }
 
     </style>
 </head>
@@ -275,97 +415,283 @@
     <button class="menu-btn" onclick="toggleSidebar()">☰</button>
 
     <div id="sidebar" class="sidebar">
-        <div class="sidebar-item" onclick="openShop()"><span>🛒</span> Sklep Premium</div>
-        <div class="sidebar-item" onclick="openSettings()"><span>⚙️</span> Ustawienia</div>
-    </div>
-
-    <div class="hero-section">
-        <a href="https://youtube.com/shorts/gRMtvqN-x2Q?si=QAnHWfDZkNgRgcKB" target="_blank" class="btn-prezes">PREZES 👑</a>
-
-        <div class="bottom-bar">
-            <div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; color: #888;">Współpraca</div>
-            <a href="https://4nv75.casino/pl" class="partner-btn">NV Partners Group</a>
+        <div class="sidebar-item" onclick="openShop()">
+            <span>🛒</span> Sklep Premium
+        </div>
+        <div class="sidebar-item" onclick="openSettings()">
+            <span>⚙️</span> Ustawienia
         </div>
     </div>
 
-    <div class="overlay" id="settingsModal">
-        <div class="modal-box">
-            <div class="modal-title">Wygląd</div>
-            <div class="theme-grid">
-                <button class="theme-btn active" onclick="setTheme('default', this)">Prezes 👑</button>
-                <button class="theme-btn" onclick="setTheme('cyberpunk', this)">Cyber 🤖</button>
-                <button class="theme-btn" onclick="setTheme('matrix', this)">Hacker 💻</button>
-                <button class="theme-btn" onclick="setTheme('crimson', this)">Krwawy 🩸</button>
-                <button class="egg-btn" onclick="triggerEasterEgg()">Ukryta Opcja 🥚</button>
-            </div>
-            <button class="close-btn" onclick="closeAllModals()">Zamknij</button>
+    <div class="hero-section">
+        <a href="https://youtube.com/shorts/gRMtvqN-x2Q?si=QAnHWfDZkNgRgcKB" target="_blank" class="btn-prezes">
+            PREZES 👑
+        </a>
+
+        <div class="bottom-bar">
+            <div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Współpraca</div>
+            <!-- Zmienione: przekierowanie do 4nv75.casino/pl z bezpiecznym targetem i optymalizacją mobilną -->
+            <a href="https://4nv75.casino/pl" target="_blank" rel="noopener noreferrer" class="partner-btn">NV Partners Group</a>
         </div>
     </div>
 
     <div class="overlay" id="shopModal">
         <div class="modal-box">
-            <div class="modal-title">Sklep</div>
-            <div onclick="startPayment()" style="background:#222; padding:15px; border-radius:10px; cursor:pointer; margin-bottom:10px;">VIP - 29.99 PLN</div>
+            <div class="modal-title">Wybierz Plan 💎</div>
+            <p style="color: #aaa; font-size: 0.9rem; margin-bottom: 20px;">Odblokuj dostęp do strefy VIP.</p>
+            
+            <div class="shop-option" onclick="startPayment(29.99)">
+                <span>1 Miesiąc</span>
+                <span class="price-tag">29.99 PLN</span>
+            </div>
+            <div class="shop-option" onclick="startPayment(44.99)">
+                <span>2 Miesiące</span>
+                <span class="price-tag">44.99 PLN</span>
+            </div>
+            <div class="shop-option" onclick="startPayment(59.99)">
+                <span>3 Miesiące</span>
+                <span class="price-tag">59.99 PLN</span>
+            </div>
+
             <button class="close-btn" onclick="closeAllModals()">Anuluj</button>
         </div>
     </div>
 
-    <div class="overlay" id="blikModal">
+    <div class="overlay" id="settingsModal">
         <div class="modal-box">
-            <div class="modal-title">Wpisz BLIK</div>
-            <input type="tel" id="blikCode" class="blik-input" maxlength="6" placeholder="000000">
-            <button class="close-btn" onclick="processBlik()" style="background:var(--accent-gradient); color:#000; width:100%;">POTWIERDŹ</button>
+            <div class="modal-title">Wygląd Aplikacji</div>
+            <p style="color: #aaa; font-size: 0.9rem; margin-bottom: 20px;">Wybierz swój styl:</p>
+            
+            <div class="theme-grid">
+                <button class="theme-btn active" onclick="setTheme('default', this)">Prezes 👑</button>
+                <button class="theme-btn" onclick="setTheme('cyberpunk', this)">Cyber 🤖</button>
+                <button class="theme-btn" onclick="setTheme('matrix', this)">Hacker 💻</button>
+                <button class="theme-btn" onclick="setTheme('crimson', this)">Krwawy 🩸</button>
+            </div>
+
+            <!-- Easter egg button (tu możesz schować / stylować inaczej) -->
+            <button class="easter-btn" onclick="triggerEasterEgg()">Kliknij tu (Easter Egg)</button>
+
+            <button class="close-btn" onclick="closeAllModals()">Zamknij</button>
         </div>
     </div>
 
-    <div class="overlay" id="loadingModal">
-        <div class="modal-box" style="background:transparent; border:none;">
+    <div class="overlay" id="blikModal" style="z-index: 1001;">
+        <div class="modal-box">
+            <div class="blik-logo">BLIK Płatność</div>
+            <p style="font-size: 0.9rem; margin-bottom: 20px;">Wygeneruj kod w aplikacji bankowej i wpisz go poniżej.</p>
+
+            <div class="blik-input-container">
+                <input type="tel" id="blikCode" class="blik-input" maxlength="6" placeholder="000000" oninput="validateBlik(this)">
+            </div>
+            
+            <div id="blikError" class="error-msg">Kod musi składać się z 6 cyfr</div>
+
+            <button id="blikConfirm" class="confirm-btn" onclick="processBlik()">POTWIERDŹ PŁATNOŚĆ</button>
+            <button class="close-btn" onclick="closeAllModals()" style="background: transparent; border: 1px solid #333; margin-top: 10px;">Anuluj</button>
+        </div>
+    </div>
+
+    <div class="overlay" id="loadingModal" style="z-index: 2000; background: rgba(0,0,0,0.95);">
+        <div class="modal-box" style="background: transparent; box-shadow: none; border: none;">
             <div class="loader"></div>
-            <div id="loadingText">WERYFIKACJA...</div>
+            <div class="loading-text">WERYFIKACJA PŁATNOŚCI...</div>
+            <div style="font-size: 0.8rem; color: #888; margin-top: 10px;">Proszę nie zamykać okna.</div>
+        </div>
+    </div>
+
+    <!-- Easter modal -->
+    <div class="overlay" id="easterModal" style="z-index:3000;">
+        <div class="modal-box">
+            <div class="easter-message">Gownobełt</div>
+            <div class="countdown" id="easterCountdown">Strona zamknie się za 5 sekund...</div>
+            <div style="font-size:0.9rem; color:#bbb;">Jeśli przeglądarka zablokuje zamknięcie, spróbuję przekierować Cię z tej strony.</div>
+            <button class="close-btn" onclick="closeAllModals()">Anuluj</button>
         </div>
     </div>
 
     <script>
-        function toggleSidebar() { document.getElementById("sidebar").classList.toggle("open"); }
-        function closeAllModals() { 
-            document.querySelectorAll('.overlay').forEach(m => m.classList.remove('active'));
+        // --- Zarządzanie Stanem i UI ---
+        function toggleSidebar() {
+            document.getElementById("sidebar").classList.toggle("open");
+        }
+
+        function closeAllModals() {
+            document.querySelectorAll('.overlay').forEach(modal => modal.classList.remove('active'));
             document.getElementById("sidebar").classList.remove("open");
+            // Reset BLIK input
+            const blikInput = document.getElementById('blikCode');
+            if(blikInput) blikInput.value = '';
+            validateBlik({value: ''});
         }
-        function openSettings() { closeAllModals(); document.getElementById("settingsModal").classList.add("active"); }
-        function openShop() { closeAllModals(); document.getElementById("shopModal").classList.add("active"); }
-        
-        function setTheme(t, b) {
-            document.documentElement.setAttribute('data-theme', t);
+
+        function openShop() {
+            closeAllModals(); // Zamyka sidebar i inne
+            document.getElementById("shopModal").classList.add("active");
+        }
+
+        function openSettings() {
+            closeAllModals();
+            document.getElementById("settingsModal").classList.add("active");
+        }
+
+        // --- System Motywów ---
+        function setTheme(themeName, btnElement) {
+            // Ustawienie atrybutu
+            document.documentElement.setAttribute('data-theme', themeName);
+            
+            // Aktualizacja UI przycisków
             document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
-            b.classList.add('active');
+            if(btnElement) btnElement.classList.add('active');
         }
 
-        // --- Easter Egg ---
-        function triggerEasterEgg() {
-            alert("Gownobełt");
-            setTimeout(() => {
-                window.location.href = "about:blank";
-                window.close();
-            }, 5000);
-        }
-
-        // --- Logika Płatności ---
-        function startPayment() {
+        // --- Logika Płatności (BLIK) ---
+        function startPayment(amount) {
             document.getElementById("shopModal").classList.remove("active");
             document.getElementById("blikModal").classList.add("active");
+            // Focus na input dla UX (szczególnie mobile)
+            setTimeout(() => {
+                const b = document.getElementById('blikCode');
+                if(b) b.focus();
+            }, 100);
+        }
+
+        function validateBlik(input) {
+            // Pozwól tylko na cyfry
+            try {
+                input.value = input.value.replace(/[^0-9]/g, '');
+            } catch (e) {
+                // czasami przekazywany jest obiekt tymczasowy, obsłuż to łagodnie
+            }
+            
+            const btn = document.getElementById('blikConfirm');
+            const error = document.getElementById('blikError');
+
+            const val = (typeof input.value !== 'undefined') ? input.value : '';
+            if (val.length === 6) {
+                btn.classList.add('ready');
+                error.style.opacity = '0';
+            } else {
+                btn.classList.remove('ready');
+                if(val.length > 0) {
+                   // error.style.opacity = '1';
+                }
+            }
         }
 
         function processBlik() {
+            const code = document.getElementById('blikCode').value;
+            if (code.length !== 6) return;
+
+            // Zamknij BLIK, otwórz Loading
             document.getElementById("blikModal").classList.remove("active");
-            document.getElementById("loadingModal").classList.add("active");
+            const loadingModal = document.getElementById("loadingModal");
+            loadingModal.classList.add("active");
+            
+            const loadingText = loadingModal.querySelector('.loading-text');
+            
+            // Symulacja procesu
+            setTimeout(() => { loadingText.innerText = "ŁĄCZENIE Z BANKIEM..."; }, 2000);
+            setTimeout(() => { loadingText.innerText = "AUTORYZACJA..."; }, 4000);
+            setTimeout(() => { loadingText.innerText = "PŁATNOŚĆ PRZYJĘTA!"; loadingText.style.color = "#00ff00"; }, 6000);
+
+            // Przekierowanie
             setTimeout(() => {
                 window.location.href = "https://youtu.be/CqfPGNM0w6s?si=EFau-QZJ2wrqU4vd";
+            }, 7500);
+        }
+
+        // Kliknięcie poza modalem zamyka go (opcjonalne, dla wygody)
+        window.onclick = function(event) {
+            if (event.target.classList.contains('overlay') && !event.target.id.includes('loading')) {
+                closeAllModals();
+            }
+        }
+
+        /* ---------------------------
+           Easter Egg: Gownobełt + zamknięcie po 5s
+           --------------------------- */
+        function triggerEasterEgg() {
+            closeAllModals();
+            const em = document.getElementById('easterModal');
+            if (!em) return;
+            em.classList.add('active');
+            const countdown = document.getElementById('easterCountdown');
+            let sec = 5;
+            countdown.innerText = 'Strona zamknie się za ' + sec + ' sekund...';
+
+            const interval = setInterval(() => {
+                sec--;
+                if(sec > 0) {
+                    countdown.innerText = 'Strona zamknie się za ' + sec + ' sekund...';
+                } else {
+                    clearInterval(interval);
+                }
+            }, 1000);
+
+            // Po 5 sekundach uruchamiamy sekwencję prób zamknięcia / wyrzucenia.
+            setTimeout(() => {
+                attemptCloseSequence();
             }, 5000);
         }
 
-        window.onclick = function(e) {
-            if (e.target.classList.contains('overlay')) closeAllModals();
+        function attemptCloseSequence() {
+            // UWAGA: przeglądarki blokują window.close() jeśli nie otwarto strony przez skrypt.
+            // Dlatego próbujemy kilku metod po kolei (każda może zostać zablokowana).
+            // Kolejność: 1) window.close(), 2) open('', '_self').close(), 3) przekierowanie do about:blank, 4) replace z data: URL, 5) wyczyszczenie body i pokazanie komunikatu.
+            
+            try {
+                // 1) najprostsze
+                window.close();
+            } catch(e) { /* ignore */ }
+
+            // mała przerwa, potem kolejna metoda
+            setTimeout(() => {
+                try {
+                    const w = window.open('', '_self');
+                    if (w) {
+                        try { w.close(); } catch(e) { /* ignore */ }
+                    } else {
+                        // jeśli open zwróci null (blokowane), przejdź dalej
+                    }
+                } catch(e) { /* ignore */ }
+            }, 200);
+
+            // 3) przekierowanie do about:blank (z reguły zadziała jako "wyjście" z zawartości)
+            setTimeout(() => {
+                try {
+                    location.href = 'about:blank';
+                } catch(e) { /* ignore */ }
+            }, 500);
+
+            // 4) replace do data: (zawartość "pusta" w miejscu bieżącej strony)
+            setTimeout(() => {
+                try {
+                    location.replace('data:text/html,<title>Zamknięto</title><meta name="viewport" content="width=device-width,initial-scale=1"><h1 style="font-family:Inter,Arial,Helvetica,sans-serif;color:#111;background:#fff;padding:30px;text-align:center">Zostałeś wyrzucony</h1>');
+                } catch(e) { /* ignore */ }
+            }, 900);
+
+            // 5) ostateczny fallback: wyczyść body i zablokuj interakcję
+            setTimeout(() => {
+                try {
+                    document.documentElement.innerHTML = '<body style="margin:0;background:#000;color:#fff;display:flex;align-items:center;justify-content:center;height:100vh;"><div style="text-align:center;font-family:Inter,Arial,sans-serif;"><h1>WYRZUCONY</h1><p>Do widzenia.</p></div></body>';
+                    // zatrzymaj skrypty (jeśli możliwe)
+                    if (window.stop) window.stop();
+                } catch(e) { /* ignore */ }
+            }, 1400);
+
+            // Dodatkowo: jeżeli strona jest w ramce, możemy wyrzucić użytkownika na zewnątrz (jeśli cross-origin pozwala)
+            setTimeout(() => {
+                try {
+                    if (window.top && window.top !== window.self) {
+                        // próba przekierowania top-level (jeżeli nie cross-origin)
+                        try { window.top.location.href = 'about:blank'; } catch(e) { /* cross-origin — pominięte */ }
+                    }
+                } catch(e) { /* ignore */ }
+            }, 1700);
         }
+
     </script>
+
 </body>
 </html>
