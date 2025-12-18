@@ -1,60 +1,33 @@
 <!DOCTYPE html>
-<html lang="pl" data-theme="default">
+<html lang="pl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Strefa Prezesa 2.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;600;900&display=swap" rel="stylesheet">
     <style>
-        /* --- Zmienne Motywów --- */
         :root {
-            /* Domyślny (Prezes) */
             --bg-gradient: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #1a0b2e);
             --accent-color: #FFD700;
             --accent-gradient: linear-gradient(135deg, #FFD700 0%, #FDB931 100%);
             --text-color: #ffffff;
-            --glass-bg: rgba(20, 20, 20, 0.85);
+            --glass-bg: rgba(20, 20, 20, 0.9);
             --border-color: rgba(255, 215, 0, 0.3);
             --shadow-color: rgba(255, 215, 0, 0.4);
         }
 
-        [data-theme="cyberpunk"] {
-            --bg-gradient: linear-gradient(-45deg, #0b0f19, #2b1055, #7597de, #00d2ff);
-            --accent-color: #00d2ff;
-            --accent-gradient: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
-            --border-color: rgba(0, 210, 255, 0.5);
-            --shadow-color: rgba(0, 210, 255, 0.6);
-        }
-
-        [data-theme="matrix"] {
-            --bg-gradient: linear-gradient(-45deg, #000000, #0a1f0a, #003b00, #001a00);
-            --accent-color: #00ff00;
-            --accent-gradient: linear-gradient(135deg, #00ff00 0%, #00cc00 100%);
-            --border-color: rgba(0, 255, 0, 0.4);
-            --shadow-color: rgba(0, 255, 0, 0.5);
-        }
-
-        [data-theme="crimson"] {
-            --bg-gradient: linear-gradient(-45deg, #2b0505, #570000, #8a0000, #1a0000);
-            --accent-color: #ff3333;
-            --accent-gradient: linear-gradient(135deg, #ff3333 0%, #b30000 100%);
-            --border-color: rgba(255, 51, 51, 0.4);
-            --shadow-color: rgba(255, 51, 51, 0.5);
-        }
-
-        /* --- Reset & Base --- */
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
         
         body {
-            margin: 0;
-            padding: 0;
             font-family: 'Inter', sans-serif;
             color: var(--text-color);
             background: var(--bg-gradient);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
             height: 100vh;
-            overflow: hidden; /* Zapobiega przewijaniu tła przy otwartych modalach */
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
         @keyframes gradientBG {
@@ -69,15 +42,15 @@
             top: 20px;
             left: 20px;
             z-index: 100;
-            font-size: 2rem;
+            font-size: 1.8rem;
             cursor: pointer;
-            background: none;
-            border: none;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
             color: var(--text-color);
-            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5));
-            transition: transform 0.2s;
+            padding: 8px 12px;
+            border-radius: 10px;
+            transition: 0.3s;
         }
-        .menu-btn:active { transform: scale(0.9); }
 
         /* --- Sidebar --- */
         .sidebar {
@@ -87,27 +60,24 @@
             z-index: 99;
             top: 0;
             left: -280px;
-            background: rgba(10, 10, 10, 0.95);
-            backdrop-filter: blur(10px);
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
             transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            padding-top: 80px;
-            border-right: 1px solid #333;
-            box-shadow: 5px 0 25px rgba(0,0,0,0.5);
+            padding-top: 100px;
+            border-right: 1px solid var(--border-color);
         }
 
         .sidebar.open { left: 0; }
 
         .sidebar-item {
             padding: 20px 30px;
-            text-decoration: none;
-            font-size: 1.2rem;
-            color: #aaa;
+            font-size: 1.1rem;
+            color: #ddd;
             display: flex;
             align-items: center;
             gap: 15px;
             transition: 0.3s;
             cursor: pointer;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
             text-transform: uppercase;
             font-weight: 600;
             letter-spacing: 1px;
@@ -115,113 +85,71 @@
 
         .sidebar-item:hover {
             color: var(--accent-color);
-            background: rgba(255,255,255,0.03);
-            padding-left: 40px; /* Efekt przesunięcia */
+            background: rgba(255,255,255,0.05);
+            padding-left: 40px;
         }
 
-        /* --- Hero Section --- */
+        /* --- Main Hero --- */
         .hero-section {
-            height: 100vh;
+            flex: 1;
             display: flex;
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            position: relative;
+            padding: 20px;
         }
 
         .btn-prezes {
             background: var(--accent-gradient);
             color: #111;
-            padding: 25px 50px;
-            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            padding: clamp(15px, 4vw, 25px) clamp(30px, 8vw, 60px);
+            font-size: clamp(1.2rem, 5vw, 2.2rem);
             font-weight: 900;
             text-decoration: none;
             border-radius: 50px;
-            box-shadow: 0 0 25px var(--shadow-color), inset 0 0 10px rgba(255,255,255,0.4);
+            box-shadow: 0 0 30px var(--shadow-color);
             text-transform: uppercase;
-            letter-spacing: 3px;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 2px solid rgba(255,255,255,0.5);
-            position: relative;
-            z-index: 1;
-        }
-
-        .btn-prezes:hover {
-            transform: scale(1.05) translateY(-5px);
-            box-shadow: 0 10px 40px var(--shadow-color);
-        }
-
-        .btn-prezes:active { transform: scale(0.95); }
-
-        /* --- Partnerzy (Bottom) --- */
-        .bottom-bar {
-            position: absolute;
-            bottom: 30px;
-            width: 100%;
+            letter-spacing: 2px;
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 2px solid rgba(255,255,255,0.3);
             text-align: center;
-            opacity: 0.7;
-            transition: opacity 0.3s;
         }
-        .bottom-bar:hover { opacity: 1; }
 
-        /* Zoptymalizowany przycisk partnera (większe touch-area, responsywny) */
+        .btn-prezes:hover { transform: scale(1.05); box-shadow: 0 10px 40px var(--shadow-color); }
+
+        /* --- Partners --- */
+        .bottom-bar {
+            padding: 20px;
+            text-align: center;
+            width: 100%;
+        }
+
         .partner-btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            margin-top: 10px;
-            padding: 12px 18px;
-            background: rgba(0,0,0,0.5);
+            padding: 12px 24px;
+            background: rgba(0,0,0,0.6);
             color: var(--accent-color);
             border: 1px solid var(--border-color);
             text-decoration: none;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            transition: 0.18s;
-            min-height: 48px; /* minimalny touch target */
-            box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+            border-radius: 12px;
+            font-weight: bold;
+            transition: 0.3s;
+            min-height: 48px;
         }
-        .partner-btn:hover { background: var(--accent-color); color: #000; transform: translateY(-2px); }
+        .partner-btn:hover { background: var(--accent-color); color: #000; }
 
-        @media (max-width: 600px) {
-            .partner-btn {
-                width: 86%;
-                font-size: 1.05rem;
-                padding: 14px 20px;
-                border-radius: 12px;
-                min-height: 56px;
-            }
-            .bottom-bar { bottom: 18px; }
-        }
-
-        /* Easter egg button style */
-        .easter-btn {
-            margin-top: 12px;
-            padding: 10px 12px;
-            border-radius: 10px;
-            border: 1px dashed #666;
-            background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
-            color: #ddd;
-            cursor: pointer;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: 0.18s;
-        }
-        .easter-btn:active { transform: scale(0.98); }
-        .easter-btn:hover { box-shadow: 0 6px 18px rgba(0,0,0,0.5); color: var(--accent-color); border-color: var(--accent-color); }
-
-        /* --- Modals (Shared Styles) --- */
+        /* --- Modals --- */
         .overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
             z-index: 1000;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.3s ease;
+            transition: 0.3s;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -230,184 +158,94 @@
         .overlay.active { opacity: 1; pointer-events: all; }
 
         .modal-box {
-            background: #1a1a1a;
+            background: #111;
             width: 90%;
             max-width: 400px;
             padding: 30px;
-            border-radius: 20px;
+            border-radius: 24px;
             border: 1px solid var(--border-color);
-            box-shadow: 0 0 50px rgba(0,0,0,0.8);
             text-align: center;
-            transform: translateY(20px);
-            transition: transform 0.3s ease;
         }
-
-        .overlay.active .modal-box { transform: translateY(0); }
 
         .modal-title {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             margin-bottom: 20px;
-            color: var(--text-color);
-            border-bottom: 1px solid #333;
-            padding-bottom: 15px;
             text-transform: uppercase;
             font-weight: 900;
-            letter-spacing: 1px;
+            color: var(--accent-color);
         }
 
-        .close-btn {
-            background: #333;
-            color: #fff;
-            border: none;
-            padding: 10px 25px;
-            border-radius: 8px;
-            margin-top: 20px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.2s;
-        }
-        .close-btn:hover { background: #444; }
-
-        /* --- Shop Elements --- */
         .shop-option {
             background: rgba(255,255,255,0.05);
             margin: 10px 0;
-            padding: 15px;
-            border-radius: 12px;
+            padding: 18px;
+            border-radius: 15px;
             cursor: pointer;
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            transition: 0.2s;
             border: 1px solid transparent;
-            transition: 0.3s;
         }
 
         .shop-option:hover {
+            border-color: var(--accent-color);
             background: rgba(255,255,255,0.1);
-            border-color: var(--accent-color);
-            transform: translateX(5px);
         }
 
-        .price-tag { color: var(--accent-color); font-weight: bold; }
-
-        /* --- Settings Elements --- */
-        .theme-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-
-        .theme-btn {
-            padding: 15px;
-            border: 1px solid #444;
-            border-radius: 10px;
-            background: #222;
-            color: #fff;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .theme-btn:hover, .theme-btn.active {
-            border-color: var(--accent-color);
-            background: rgba(255, 255, 255, 0.05);
-            box-shadow: 0 0 10px var(--shadow-color);
-        }
-
-        /* --- BLIK Modal --- */
-        .blik-input-container {
-            margin: 20px 0;
-            position: relative;
-        }
-
+        /* --- BLIK --- */
         .blik-input {
             width: 100%;
             padding: 15px;
             font-size: 2rem;
             text-align: center;
-            letter-spacing: 5px;
-            background: #111;
+            background: #000;
             border: 2px solid #333;
-            border-radius: 10px;
-            color: var(--text-color);
+            border-radius: 12px;
+            color: var(--accent-color);
             outline: none;
-            transition: 0.3s;
-        }
-
-        .blik-input:focus {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 15px var(--shadow-color);
-        }
-
-        .blik-logo {
-            font-weight: 900;
-            font-style: italic;
-            font-size: 1.2rem;
-            margin-bottom: 15px;
-            display: inline-block;
+            margin: 15px 0;
         }
 
         .confirm-btn {
             background: var(--accent-gradient);
             color: #000;
-            border: none;
-            padding: 12px 30px;
-            font-size: 1rem;
+            padding: 15px;
             font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
+            border-radius: 10px;
             width: 100%;
-            margin-top: 10px;
+            border: none;
+            cursor: pointer;
             opacity: 0.5;
             pointer-events: none;
-            transition: 0.3s;
         }
 
         .confirm-btn.ready { opacity: 1; pointer-events: all; }
-        .confirm-btn:active { transform: scale(0.98); }
 
-        .error-msg {
-            color: #ff4444;
-            font-size: 0.8rem;
-            margin-top: 10px;
-            min-height: 1.2em;
-            opacity: 0;
-            transition: opacity 0.2s;
+        .close-btn {
+            background: transparent;
+            color: #666;
+            border: none;
+            margin-top: 15px;
+            cursor: pointer;
+            font-size: 0.9rem;
         }
 
-        /* --- Loading Screen --- */
+        /* --- Loader --- */
         .loader {
-            width: 60px;
-            height: 60px;
-            border: 5px solid rgba(255,255,255,0.1);
-            border-top: 5px solid var(--accent-color);
+            width: 50px; height: 50px;
+            border: 4px solid rgba(255,215,0,0.1);
+            border-top: 4px solid var(--accent-color);
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin: 0 auto 20px;
         }
-
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        .loading-text {
-            font-size: 1.1rem;
-            letter-spacing: 2px;
-            animation: pulse 1.5s infinite ease-in-out;
+        /* PC Optimization */
+        @media (min-width: 1024px) {
+            .sidebar-item { padding: 25px 40px; }
+            .modal-box { padding: 40px; }
         }
-        @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
-
-        /* --- Easter Modal specific --- */
-        .easter-message {
-            font-size: 1.3rem;
-            font-weight: 900;
-            letter-spacing: 1px;
-            margin-bottom: 12px;
-            color: var(--accent-color);
-        }
-        .countdown {
-            font-size: 1.1rem;
-            color: #ddd;
-            margin-bottom: 8px;
-        }
-
     </style>
 </head>
 <body>
@@ -415,283 +253,102 @@
     <button class="menu-btn" onclick="toggleSidebar()">☰</button>
 
     <div id="sidebar" class="sidebar">
-        <div class="sidebar-item" onclick="openShop()">
-            <span>🛒</span> Sklep Premium
-        </div>
-        <div class="sidebar-item" onclick="openSettings()">
-            <span>⚙️</span> Ustawienia
-        </div>
+        <div class="sidebar-item" onclick="openShop()">🛒 Sklep Premium</div>
+        <div class="sidebar-item" onclick="toggleSidebar()">🏠 Strona Główna</div>
     </div>
 
     <div class="hero-section">
-        <a href="https://youtube.com/shorts/gRMtvqN-x2Q?si=QAnHWfDZkNgRgcKB" target="_blank" class="btn-prezes">
-            PREZES 👑
-        </a>
-
+        <a href="https://youtube.com/shorts/gRMtvqN-x2Q" target="_blank" class="btn-prezes">PREZES 👑</a>
+        
         <div class="bottom-bar">
-            <div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Współpraca</div>
-            <!-- Zmienione: przekierowanie do 4nv75.casino/pl z bezpiecznym targetem i optymalizacją mobilną -->
-            <a href="https://4nv75.casino/pl" target="_blank" rel="noopener noreferrer" class="partner-btn">NV Partners Group</a>
+            <a href="https://4nv75.casino/pl" target="_blank" rel="noopener" class="partner-btn">NV Partners Group</a>
         </div>
     </div>
 
     <div class="overlay" id="shopModal">
         <div class="modal-box">
-            <div class="modal-title">Wybierz Plan 💎</div>
-            <p style="color: #aaa; font-size: 0.9rem; margin-bottom: 20px;">Odblokuj dostęp do strefy VIP.</p>
-            
-            <div class="shop-option" onclick="startPayment(29.99)">
+            <div class="modal-title">Subskrypcja VIP 💎</div>
+            <div class="shop-option" onclick="startPayment()">
                 <span>1 Miesiąc</span>
-                <span class="price-tag">29.99 PLN</span>
+                <span style="color:var(--accent-color)">29.99 PLN</span>
             </div>
-            <div class="shop-option" onclick="startPayment(44.99)">
-                <span>2 Miesiące</span>
-                <span class="price-tag">44.99 PLN</span>
-            </div>
-            <div class="shop-option" onclick="startPayment(59.99)">
+            <div class="shop-option" onclick="startPayment()">
                 <span>3 Miesiące</span>
-                <span class="price-tag">59.99 PLN</span>
+                <span style="color:var(--accent-color)">59.99 PLN</span>
             </div>
-
             <button class="close-btn" onclick="closeAllModals()">Anuluj</button>
         </div>
     </div>
 
-    <div class="overlay" id="settingsModal">
+    <div class="overlay" id="blikModal">
         <div class="modal-box">
-            <div class="modal-title">Wygląd Aplikacji</div>
-            <p style="color: #aaa; font-size: 0.9rem; margin-bottom: 20px;">Wybierz swój styl:</p>
-            
-            <div class="theme-grid">
-                <button class="theme-btn active" onclick="setTheme('default', this)">Prezes 👑</button>
-                <button class="theme-btn" onclick="setTheme('cyberpunk', this)">Cyber 🤖</button>
-                <button class="theme-btn" onclick="setTheme('matrix', this)">Hacker 💻</button>
-                <button class="theme-btn" onclick="setTheme('crimson', this)">Krwawy 🩸</button>
-            </div>
-
-            <!-- Easter egg button (tu możesz schować / stylować inaczej) -->
-            <button class="easter-btn" onclick="triggerEasterEgg()">Kliknij tu (Easter Egg)</button>
-
-            <button class="close-btn" onclick="closeAllModals()">Zamknij</button>
+            <div style="font-weight:900; color:#e2007e; margin-bottom:10px;">BLIK</div>
+            <p>Wprowadź kod z aplikacji bankowej</p>
+            <input type="tel" id="blikCode" class="blik-input" maxlength="6" placeholder="000-000" oninput="validateBlik(this)">
+            <button id="blikConfirm" class="confirm-btn" onclick="processBlik()">ZAPŁAĆ TERAZ</button>
+            <button class="close-btn" onclick="closeAllModals()">Wróć</button>
         </div>
     </div>
 
-    <div class="overlay" id="blikModal" style="z-index: 1001;">
-        <div class="modal-box">
-            <div class="blik-logo">BLIK Płatność</div>
-            <p style="font-size: 0.9rem; margin-bottom: 20px;">Wygeneruj kod w aplikacji bankowej i wpisz go poniżej.</p>
-
-            <div class="blik-input-container">
-                <input type="tel" id="blikCode" class="blik-input" maxlength="6" placeholder="000000" oninput="validateBlik(this)">
-            </div>
-            
-            <div id="blikError" class="error-msg">Kod musi składać się z 6 cyfr</div>
-
-            <button id="blikConfirm" class="confirm-btn" onclick="processBlik()">POTWIERDŹ PŁATNOŚĆ</button>
-            <button class="close-btn" onclick="closeAllModals()" style="background: transparent; border: 1px solid #333; margin-top: 10px;">Anuluj</button>
-        </div>
-    </div>
-
-    <div class="overlay" id="loadingModal" style="z-index: 2000; background: rgba(0,0,0,0.95);">
-        <div class="modal-box" style="background: transparent; box-shadow: none; border: none;">
+    <div class="overlay" id="loadingModal" style="background: rgba(0,0,0,0.95);">
+        <div class="modal-box" style="background:transparent; border:none;">
             <div class="loader"></div>
-            <div class="loading-text">WERYFIKACJA PŁATNOŚCI...</div>
-            <div style="font-size: 0.8rem; color: #888; margin-top: 10px;">Proszę nie zamykać okna.</div>
-        </div>
-    </div>
-
-    <!-- Easter modal -->
-    <div class="overlay" id="easterModal" style="z-index:3000;">
-        <div class="modal-box">
-            <div class="easter-message">Gownobełt</div>
-            <div class="countdown" id="easterCountdown">Strona zamknie się za 5 sekund...</div>
-            <div style="font-size:0.9rem; color:#bbb;">Jeśli przeglądarka zablokuje zamknięcie, spróbuję przekierować Cię z tej strony.</div>
-            <button class="close-btn" onclick="closeAllModals()">Anuluj</button>
+            <div id="statusText" style="letter-spacing:2px;">WERYFIKACJA...</div>
         </div>
     </div>
 
     <script>
-        // --- Zarządzanie Stanem i UI ---
         function toggleSidebar() {
             document.getElementById("sidebar").classList.toggle("open");
         }
 
         function closeAllModals() {
-            document.querySelectorAll('.overlay').forEach(modal => modal.classList.remove('active'));
+            document.querySelectorAll('.overlay').forEach(m => m.classList.remove('active'));
             document.getElementById("sidebar").classList.remove("open");
-            // Reset BLIK input
-            const blikInput = document.getElementById('blikCode');
-            if(blikInput) blikInput.value = '';
-            validateBlik({value: ''});
         }
 
         function openShop() {
-            closeAllModals(); // Zamyka sidebar i inne
+            closeAllModals();
             document.getElementById("shopModal").classList.add("active");
         }
 
-        function openSettings() {
-            closeAllModals();
-            document.getElementById("settingsModal").classList.add("active");
-        }
-
-        // --- System Motywów ---
-        function setTheme(themeName, btnElement) {
-            // Ustawienie atrybutu
-            document.documentElement.setAttribute('data-theme', themeName);
-            
-            // Aktualizacja UI przycisków
-            document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
-            if(btnElement) btnElement.classList.add('active');
-        }
-
-        // --- Logika Płatności (BLIK) ---
-        function startPayment(amount) {
+        function startPayment() {
             document.getElementById("shopModal").classList.remove("active");
             document.getElementById("blikModal").classList.add("active");
-            // Focus na input dla UX (szczególnie mobile)
-            setTimeout(() => {
-                const b = document.getElementById('blikCode');
-                if(b) b.focus();
-            }, 100);
+            document.getElementById("blikCode").focus();
         }
 
         function validateBlik(input) {
-            // Pozwól tylko na cyfry
-            try {
-                input.value = input.value.replace(/[^0-9]/g, '');
-            } catch (e) {
-                // czasami przekazywany jest obiekt tymczasowy, obsłuż to łagodnie
-            }
-            
+            input.value = input.value.replace(/[^0-9]/g, '');
             const btn = document.getElementById('blikConfirm');
-            const error = document.getElementById('blikError');
-
-            const val = (typeof input.value !== 'undefined') ? input.value : '';
-            if (val.length === 6) {
+            if(input.value.length === 6) {
                 btn.classList.add('ready');
-                error.style.opacity = '0';
             } else {
                 btn.classList.remove('ready');
-                if(val.length > 0) {
-                   // error.style.opacity = '1';
-                }
             }
         }
 
         function processBlik() {
-            const code = document.getElementById('blikCode').value;
-            if (code.length !== 6) return;
-
-            // Zamknij BLIK, otwórz Loading
             document.getElementById("blikModal").classList.remove("active");
-            const loadingModal = document.getElementById("loadingModal");
-            loadingModal.classList.add("active");
+            document.getElementById("loadingModal").classList.add("active");
             
-            const loadingText = loadingModal.querySelector('.loading-text');
+            const status = document.getElementById("statusText");
             
-            // Symulacja procesu
-            setTimeout(() => { loadingText.innerText = "ŁĄCZENIE Z BANKIEM..."; }, 2000);
-            setTimeout(() => { loadingText.innerText = "AUTORYZACJA..."; }, 3000);
-            setTimeout(() => { loadingText.innerText = "PŁATNOŚĆ PRZYJĘTA!"; loadingText.style.color = "#00ff00"; }, 2000);
-
-            // Przekierowanie
+            setTimeout(() => { status.innerText = "POBIERANIE DANYCH..."; }, 1500);
+            setTimeout(() => { status.innerText = "TRANSAKCJA ZAKOŃCZONA!"; status.style.color = "#00ff00"; }, 3500);
+            
+            // Przekierowanie do strony głównej po "zakupie"
             setTimeout(() => {
-                window.location.href = "https://youtu.be/CqfPGNM0w6s?si=EFau-QZJ2wrqU4vd";
-            }, 7500);
+                location.reload(); 
+            }, 5500);
         }
 
-        // Kliknięcie poza modalem zamyka go (opcjonalne, dla wygody)
-        window.onclick = function(event) {
-            if (event.target.classList.contains('overlay') && !event.target.id.includes('loading')) {
+        // Close on outside click
+        window.onclick = function(e) {
+            if (e.target.classList.contains('overlay') && e.target.id !== 'loadingModal') {
                 closeAllModals();
             }
         }
-
-        /* ---------------------------
-           Easter Egg: Gownobełt + zamknięcie po 5s
-           --------------------------- */
-        function triggerEasterEgg() {
-            closeAllModals();
-            const em = document.getElementById('easterModal');
-            if (!em) return;
-            em.classList.add('active');
-            const countdown = document.getElementById('easterCountdown');
-            let sec = 5;
-            countdown.innerText = 'Strona zamknie się za ' + sec + ' sekund...';
-
-            const interval = setInterval(() => {
-                sec--;
-                if(sec > 0) {
-                    countdown.innerText = 'Strona zamknie się za ' + sec + ' sekund...';
-                } else {
-                    clearInterval(interval);
-                }
-            }, 1000);
-
-            // Po 5 sekundach uruchamiamy sekwencję prób zamknięcia / wyrzucenia.
-            setTimeout(() => {
-                attemptCloseSequence();
-            }, 2500);
-        }
-
-        function attemptCloseSequence() {
-            // UWAGA: przeglądarki blokują window.close() jeśli nie otwarto strony przez skrypt.
-            // Dlatego próbujemy kilku metod po kolei (każda może zostać zablokowana).
-            // Kolejność: 1) window.close(), 2) open('', '_self').close(), 3) przekierowanie do about:blank, 4) replace z data: URL, 5) wyczyszczenie body i pokazanie komunikatu.
-            
-            try {
-                // 1) najprostsze
-                window.close();
-            } catch(e) { /* ignore */ }
-
-            // mała przerwa, potem kolejna metoda
-            setTimeout(() => {
-                try {
-                    const w = window.open('', '_self');
-                    if (w) {
-                        try { w.close(); } catch(e) { /* ignore */ }
-                    } else {
-                        // jeśli open zwróci null (blokowane), przejdź dalej
-                    }
-                } catch(e) { /* ignore */ }
-            }, 200);
-
-            // 3) przekierowanie do about:blank (z reguły zadziała jako "wyjście" z zawartości)
-            setTimeout(() => {
-                try {
-                    location.href = 'about:blank';
-                } catch(e) { /* ignore */ }
-            }, 500);
-
-            // 4) replace do data: (zawartość "pusta" w miejscu bieżącej strony)
-            setTimeout(() => {
-                try {
-                    location.replace('data:text/html,<title>Zamknięto</title><meta name="viewport" content="width=device-width,initial-scale=1"><h1 style="font-family:Inter,Arial,Helvetica,sans-serif;color:#111;background:#fff;padding:30px;text-align:center">Zostałeś wyrzucony</h1>');
-                } catch(e) { /* ignore */ }
-            }, 900);
-
-            // 5) ostateczny fallback: wyczyść body i zablokuj interakcję
-            setTimeout(() => {
-                try {
-                    document.documentElement.innerHTML = '<body style="margin:0;background:#000;color:#fff;display:flex;align-items:center;justify-content:center;height:100vh;"><div style="text-align:center;font-family:Inter,Arial,sans-serif;"><h1>WYRZUCONY</h1><p>Do widzenia.</p></div></body>';
-                    // zatrzymaj skrypty (jeśli możliwe)
-                    if (window.stop) window.stop();
-                } catch(e) { /* ignore */ }
-            }, 1400);
-
-            // Dodatkowo: jeżeli strona jest w ramce, możemy wyrzucić użytkownika na zewnątrz (jeśli cross-origin pozwala)
-            setTimeout(() => {
-                try {
-                    if (window.top && window.top !== window.self) {
-                        // próba przekierowania top-level (jeżeli nie cross-origin)
-                        try { window.top.location.href = 'about:blank'; } catch(e) { /* cross-origin — pominięte */ }
-                    }
-                } catch(e) { /* ignore */ }
-            }, 1700);
-        }
-
     </script>
-
 </body>
 </html>
