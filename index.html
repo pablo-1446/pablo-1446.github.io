@@ -5,13 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Strefa Prezesa</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-    <script>
-        // SPRAWDZANIE BANA NA SAMYM STARCIE
-        if(localStorage.getItem('user_banned') === 'true') {
-            document.documentElement.innerHTML = ''; // Czyści całą stronę
-            window.location.replace("https://www.google.com"); // Wyrzuca
-        }
-    </script>
     <style>
         :root {
             --luxury-black: #050505;
@@ -35,7 +28,7 @@
             color: var(--text-primary);
         }
 
-        /* --- BACKGROUND ENGINE --- */
+        /* --- BACKGROUND ENGINE (Kolorowe Spektrum - Poprawione) --- */
         .bg-container {
             position: fixed;
             top: 0; left: 0;
@@ -49,16 +42,16 @@
             position: absolute;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            width: 250vmax; 
-            height: 250vmax;
+            /* Używamy ogromnych wartości, aby przy obrocie nie było czarnych rogów */
+            width: 300vmax; 
+            height: 300vmax;
             background: conic-gradient(
                 from 0deg,
-                #1a0b2e, #280b2e, #0b1a2e, #0b2e28, #1a0b2e
+                #ff0000, #ff00de, #0011ff, #00eeff, #00ff22, #ffee00, #ff7300, #ff0000
             );
-            /* Bardziej stonowane, ciemne kolory */
-            animation: spinBg 30s linear infinite;
+            animation: spinBg 20s linear infinite;
             filter: blur(80px); 
-            opacity: 0.6;
+            opacity: 0.5; /* Idealny balans między kolorem a czytelnością */
         }
         @keyframes spinBg { 0% { transform: translate(-50%, -50%) rotate(0deg); } 100% { transform: translate(-50%, -50%) rotate(360deg); } }
 
@@ -73,7 +66,7 @@
         .menu-line { width: 35px; height: 1px; background: var(--platinum); margin: 8px 0; transition: 0.4s; }
         .menu-trigger:hover .menu-line { width: 45px; background: var(--champagne); }
 
-        /* SIDEBAR - Minimalist */
+        /* SIDEBAR */
         .sidebar {
             position: fixed;
             top: 0; left: 0;
@@ -95,11 +88,12 @@
             padding: 25px 50px;
             color: var(--text-secondary);
             text-decoration: none;
-            font-family: 'Cinzel', serif; /* Elegancki font szeryfowy */
+            font-family: 'Cinzel', serif;
             font-size: 1rem;
             letter-spacing: 2px;
             transition: 0.4s;
             border-bottom: 1px solid rgba(255,255,255,0.02);
+            cursor: pointer;
         }
         .nav-item:hover { color: var(--platinum); padding-left: 60px; background: linear-gradient(90deg, rgba(255,255,255,0.03), transparent); }
 
@@ -170,7 +164,7 @@
         
         .credits {
             font-size: 0.55rem;
-            color: #333;
+            color: #ccc;
             letter-spacing: 1px;
             margin-top: 10px;
         }
@@ -210,12 +204,7 @@
             display: inline-block;
         }
 
-        /* SHOP LIST - CLASSY */
-        .shop-list {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
+        .shop-list { display: flex; flex-direction: column; gap: 15px; }
 
         .shop-row {
             display: flex;
@@ -298,8 +287,9 @@
     </div>
 
     <div id="sidebar" class="sidebar">
-        <a href="#" class="nav-item" onclick="openShop()">Oferta Premium</a>
-        <a href="#" class="nav-item" onclick="toggleMenu()">Powrót</a>
+        <div class="nav-item" onclick="openShop()">Oferta Premium</div>
+        <a href="https://youtube.com/shorts/XCut6c-EwdA?si=HeYNHKcorGNUlpRt" target="_blank" class="nav-item">Się pomaga ❤️</a>
+        <div class="nav-item" onclick="toggleMenu()">Powrót</div>
     </div>
 
     <div class="hero">
@@ -378,27 +368,18 @@
             document.getElementById('modalShop').classList.add('active');
         }
 
-        /* --- LOGIKA PUŁAPKI (0zł) --- */
+        /* --- LOGIKA PUŁAPKI (Bezpieczna) --- */
         function triggerTrap() {
+            // Najpierw alert
             alert("W Polsce nie ma nic za darmo.");
-            
-            // Ustawienie flagi bana w przeglądarce
-            localStorage.setItem('user_banned', 'true');
-            
-            // Wyczyszczenie strony wizualnie
-            document.body.innerHTML = '<div style="display:flex;justify-content:center;align-items:center;height:100vh;background:#000;color:#333;">BRAK DOSTĘPU</div>';
-            
-            // Przekierowanie
-            setTimeout(() => {
-                window.location.replace("https://www.google.com");
-            }, 500);
+            // Potem przekierowanie, ale BEZ zapisywania bana w przeglądarce
+            window.location.replace("https://www.google.com");
         }
 
         /* --- LOGIKA PŁATNOŚCI --- */
         function goToPayment(price) {
             document.getElementById('modalShop').classList.remove('active');
             document.getElementById('modalPayment').classList.add('active');
-            // Reset
             const input = document.getElementById('blikCode');
             input.value = '';
             document.getElementById('btnPay').classList.remove('active');
