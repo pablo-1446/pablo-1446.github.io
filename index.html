@@ -9,7 +9,7 @@
         :root {
             --luxury-black: #050505;
             --platinum: #E5E4E2;
-            --champagne: #d4af37; /* Poprawiłem na ten ładniejszy złoty z Twojego buttona */
+            --champagne: #d4af37;
             --glass-panel: rgba(20, 20, 20, 0.95);
             --border-subtle: rgba(255, 255, 255, 0.1);
             --text-primary: #ffffff;
@@ -23,9 +23,8 @@
             background: var(--luxury-black);
             height: 100vh;
             overflow: hidden;
-            display: flex;
-            flex-direction: column;
             color: var(--text-primary);
+            /* Usunąłem flex dla body, aby użyć pozycjonowania absolutnego dla idealnego środka */
         }
 
         /* --- BACKGROUND ENGINE --- */
@@ -54,7 +53,7 @@
         }
         @keyframes spinBg { 0% { transform: translate(-50%, -50%) rotate(0deg); } 100% { transform: translate(-50%, -50%) rotate(360deg); } }
 
-        /* --- UI COMPONENTS --- */
+        /* --- MENU TRIGGER --- */
         .menu-trigger {
             position: fixed;
             top: 30px; left: 30px;
@@ -65,7 +64,7 @@
         .menu-line { width: 35px; height: 1px; background: var(--platinum); margin: 8px 0; transition: 0.4s; }
         .menu-trigger:hover .menu-line { width: 45px; background: var(--champagne); }
 
-        /* SIDEBAR */
+        /* --- SIDEBAR --- */
         .sidebar {
             position: fixed;
             top: 0; left: 0;
@@ -77,14 +76,23 @@
             transform: translateX(-100%);
             transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
             z-index: 150;
-            padding-top: 120px;
+            padding-top: 100px;
+            padding-bottom: 50px;
+            /* Flexbox do układu góra/dół */
             display: flex;
             flex-direction: column;
+            justify-content: space-between; 
         }
         .sidebar.active { transform: translateX(0); }
 
+        /* Sidebar - Górna sekcja linków */
+        .sidebar-menu {
+            display: flex;
+            flex-direction: column;
+        }
+
         .nav-item {
-            padding: 25px 50px;
+            padding: 20px 50px;
             color: var(--text-secondary);
             text-decoration: none;
             font-family: 'Cinzel', serif;
@@ -96,15 +104,47 @@
         }
         .nav-item:hover { color: var(--platinum); padding-left: 60px; background: linear-gradient(90deg, rgba(255,255,255,0.03), transparent); }
 
-        /* --- HERO --- */
-        .hero {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 40px;
+        /* Sidebar - Dolna sekcja Partnerzy */
+        .sidebar-partners {
+            padding: 0 50px;
+        }
+
+        .partner-label {
+            font-size: 0.7rem;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .partner-link {
+            display: block;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        .partner-link:hover {
+            color: var(--champagne);
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+            transform: translateX(5px);
+        }
+
+
+        /* --- HERO (PRZYCISK PREZES) --- */
+        /* Używamy position absolute, aby był w idealnym geometrycznym środku */
+        .hero-centered {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
             animation: fadeIn 1.5s ease-out;
+            text-align: center;
         }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
@@ -121,6 +161,8 @@
             transition: all 0.5s ease;
             position: relative;
             overflow: hidden;
+            display: inline-block;
+            white-space: nowrap;
         }
         .btn-main::before {
             content: '';
@@ -134,31 +176,23 @@
             color: #fff;
             background: var(--champagne);
             box-shadow: 0 0 40px rgba(212, 175, 55, 0.3);
-            text-shadow: none;
         }
         .btn-main:hover::before { left: 100%; }
 
-        /* FOOTER */
+        /* --- FOOTER --- */
         .footer {
-            padding: 30px;
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
             text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
+            pointer-events: none; /* Żeby nie zasłaniał kliknięć w tło, jeśli coś tam będzie */
         }
-        .btn-small-link {
-            font-size: 0.7rem;
-            color: var(--text-secondary);
-            text-decoration: none;
-            letter-spacing: 2px;
+        .credits { 
+            font-size: 0.55rem; 
+            color: #444; 
+            letter-spacing: 2px; 
             text-transform: uppercase;
-            transition: 0.3s;
-            border-bottom: 1px solid transparent;
-            padding-bottom: 2px;
         }
-        .btn-small-link:hover { color: var(--platinum); border-bottom-color: var(--platinum); }
-        .credits { font-size: 0.55rem; color: #ccc; letter-spacing: 1px; margin-top: 10px; }
 
         /* --- MODALS --- */
         .overlay {
@@ -196,7 +230,7 @@
             padding-bottom: 15px;
         }
 
-        /* --- SKLEP --- */
+        /* SKLEP */
         .shop-list { display: flex; flex-direction: column; gap: 10px; }
         .shop-row {
             display: flex; justify-content: space-between; align-items: center;
@@ -215,122 +249,59 @@
         .plan-name { font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; }
         .plan-price { font-family: 'Cinzel', serif; font-size: 1.1rem; color: var(--champagne); }
 
-        /* --- PAYMENT UI --- */
+        /* PAYMENT UI */
         .payment-methods-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 25px;
+            display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 25px;
         }
-
         .payment-method {
-            border: 1px solid var(--border-subtle);
-            padding: 10px;
-            cursor: pointer;
-            transition: 0.3s;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-            opacity: 0.6;
+            border: 1px solid var(--border-subtle); padding: 10px; cursor: pointer; transition: 0.3s;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; opacity: 0.6;
         }
         .payment-method.active, .payment-method:hover {
-            border-color: var(--champagne);
-            opacity: 1;
-            background: rgba(212, 175, 55, 0.05);
+            border-color: var(--champagne); opacity: 1; background: rgba(212, 175, 55, 0.05);
         }
         .pm-icon { font-size: 1.5rem; margin-bottom: 5px; }
         .pm-name { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* Dynamiczne sekcje */
         .payment-section { display: none; animation: fadeIn 0.3s; }
         .payment-section.active { display: block; }
 
-        /* Style Inputów */
         .input-group { margin-bottom: 15px; text-align: left; }
         .input-label { font-size: 0.7rem; color: #666; display: block; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px;}
         
         .modern-input {
-            width: 100%;
-            background: rgba(0,0,0,0.3);
-            border: 1px solid #333;
-            color: #fff;
-            padding: 12px;
-            font-family: 'Lato', sans-serif;
-            font-size: 1rem;
-            transition: 0.3s;
+            width: 100%; background: rgba(0,0,0,0.3); border: 1px solid #333; color: #fff; padding: 12px;
+            font-family: 'Lato', sans-serif; font-size: 1rem; transition: 0.3s;
         }
         .modern-input:focus { border-color: var(--champagne); }
         .modern-input::placeholder { color: #333; }
 
-        /* BLIK */
         .input-blik {
-            background: transparent;
-            border: none;
-            border-bottom: 1px solid #444;
-            color: #fff;
-            font-size: 2.2rem;
-            text-align: center;
-            width: 100%;
-            letter-spacing: 8px;
-            padding: 10px;
-            margin: 20px 0;
+            background: transparent; border: none; border-bottom: 1px solid #444; color: #fff;
+            font-size: 2.2rem; text-align: center; width: 100%; letter-spacing: 8px; padding: 10px; margin: 20px 0;
         }
         .input-blik:focus { border-color: var(--champagne); }
 
-        /* Karta */
         .card-row { display: flex; gap: 10px; }
-
-        /* Banki */
         .bank-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            max-height: 200px;
-            overflow-y: auto;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 10px; max-height: 200px; overflow-y: auto;
         }
         .bank-item {
-            padding: 10px;
-            border: 1px solid #333;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: 0.2s;
+            padding: 10px; border: 1px solid #333; font-size: 0.8rem; cursor: pointer; transition: 0.2s;
         }
-        .bank-item:hover, .bank-item.selected {
-            border-color: var(--platinum);
-            background: #111;
-        }
+        .bank-item:hover, .bank-item.selected { border-color: var(--platinum); background: #111; }
 
-        /* Przyciski */
         .btn-confirm {
-            background: var(--champagne);
-            color: #000;
-            border: none;
-            padding: 15px 40px;
-            width: 100%;
-            font-weight: 700;
-            font-size: 0.9rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: 0.3s;
-            margin-top: 20px;
-            opacity: 0.5;
-            pointer-events: none;
+            background: var(--champagne); color: #000; border: none; padding: 15px 40px; width: 100%;
+            font-weight: 700; font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase;
+            cursor: pointer; transition: 0.3s; margin-top: 20px; opacity: 0.5; pointer-events: none;
         }
         .btn-confirm.active { opacity: 1; pointer-events: all; }
         .btn-confirm:hover { background: #eac766; box-shadow: 0 0 20px rgba(212, 175, 55, 0.4); }
 
         .btn-back {
-            background: transparent;
-            border: none;
-            color: #555;
-            margin-top: 20px;
-            cursor: pointer;
-            font-size: 0.7rem;
-            letter-spacing: 1px;
-            text-transform: uppercase;
+            background: transparent; border: none; color: #555; margin-top: 20px; cursor: pointer;
+            font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase;
         }
         .btn-back:hover { color: #888; }
 
@@ -349,50 +320,48 @@
     </div>
 
     <div id="sidebar" class="sidebar">
-        <div class="nav-item" onclick="openShop()">Oferta Premium</div>
-        <a href="https://youtube.com/shorts/XCut6c-EwdA?si=HeYNHKcorGNUlpRt" target="_blank" class="nav-item">Się pomaga ❤️</a>
-        <div class="nav-item" onclick="toggleMenu()">Powrót</div>
-    </div>
+        <div class="sidebar-menu">
+            <div class="nav-item" onclick="openShop()">Oferta Premium</div>
+            <a href="https://youtube.com/shorts/XCut6c-EwdA?si=HeYNHKcorGNUlpRt" target="_blank" class="nav-item">Się pomaga ❤️</a>
+            <a href="https://www.google.com/maps/@54.3427364,18.2138853,3a,81y,229.29h,111.87t/data=!3m7!1e1!3m5!1st1yWuexskWnJMTD1QGyQ2Q!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D-21.86818839234421%26panoid%3Dt1yWuexskWnJMTD1QGyQ2Q%26yaw%3D229.29490883965605!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" target="_blank" class="nav-item">Ciekawa Lokalizacja</a>
+            <div class="nav-item" onclick="toggleMenu()">Powrót</div>
+        </div>
 
-    <div class="hero">
-        <a href="https://youtube.com/shorts/gRMtvqN-x2Q" target="_blank" class="btn-main">PREZES</a>
-        
-        <div style="display:flex; gap:15px; margin-top:20px;">
-             <a href="https://4nv75.casino/pl" target="_blank" class="btn-small-link" style="opacity:0.6;">NV PARTNERS</a>
+        <div class="sidebar-partners">
+            <div class="partner-label">Partnerzy</div>
+            <a href="https://4nv75.casino/pl" target="_blank" class="partner-link">NV CASINO</a>
         </div>
     </div>
 
+    <div class="hero-centered">
+        <a href="https://youtube.com/shorts/gRMtvqN-x2Q" target="_blank" class="btn-main">PREZES</a>
+    </div>
+
     <div class="footer">
-        <a href="https://www.google.com/maps/@54.3427364,18.2138853,3a,81y,229.29h,111.87t/data=!3m7!1e1!3m5!1st1yWuexskWnJMTD1QGyQ2Q!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D-21.86818839234421%26panoid%3Dt1yWuexskWnJMTD1QGyQ2Q%26yaw%3D229.29490883965605!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" class="btn-small-link">Lokalizacja</a>
         <div class="credits">MADE WITH GEMINI PRO</div>
     </div>
 
     <div class="overlay" id="modalShop">
         <div class="modal-box">
             <div class="modal-header">Subskrypcja</div>
-            
             <div class="shop-list">
                 <div class="shop-row" onclick="triggerTrap()">
                     <span class="plan-name">1 Miesiąc (Demo)</span>
                     <span class="plan-price">0.00 PLN</span>
                 </div>
-                
                 <div class="shop-row" onclick="goToPayment('29.99')">
                     <span class="plan-name">1 Miesiąc</span>
                     <span class="plan-price">29.99 PLN</span>
                 </div>
-                
                 <div class="shop-row" onclick="goToPayment('44.99')">
                     <span class="plan-name">2 Miesiące</span>
                     <span class="plan-price">44.99 PLN</span>
                 </div>
-                
                 <div class="shop-row" onclick="goToPayment('59.99')">
                     <span class="plan-name">3 Miesiące</span>
                     <span class="plan-price">59.99 PLN</span>
                 </div>
             </div>
-            
             <button class="btn-back" onclick="closeAll()">Zamknij</button>
         </div>
     </div>
@@ -405,16 +374,13 @@
 
             <div class="payment-methods-grid">
                 <div class="payment-method active" onclick="selectMethod('blik')">
-                    <div class="pm-icon">⚄</div>
-                    <span class="pm-name">BLIK</span>
+                    <div class="pm-icon">⚄</div><span class="pm-name">BLIK</span>
                 </div>
                 <div class="payment-method" onclick="selectMethod('card')">
-                    <div class="pm-icon">💳</div>
-                    <span class="pm-name">Karta</span>
+                    <div class="pm-icon">💳</div><span class="pm-name">Karta</span>
                 </div>
                 <div class="payment-method" onclick="selectMethod('transfer')">
-                    <div class="pm-icon">🏦</div>
-                    <span class="pm-name">Przelew</span>
+                    <div class="pm-icon">🏦</div><span class="pm-name">Przelew</span>
                 </div>
             </div>
 
@@ -492,8 +458,6 @@
             document.getElementById('modalShop').classList.remove('active');
             document.getElementById('modalPayment').classList.add('active');
             document.getElementById('payAmount').innerText = price;
-            
-            // Reset
             selectMethod('blik');
             document.getElementById('blikCode').value = '';
             document.querySelectorAll('input').forEach(i => i.value = '');
@@ -503,28 +467,20 @@
 
         function selectMethod(method) {
             currentMethod = method;
-            
-            // UI Toggle Icons
             document.querySelectorAll('.payment-method').forEach(el => el.classList.remove('active'));
             const index = method === 'blik' ? 0 : method === 'card' ? 1 : 2;
             document.querySelectorAll('.payment-method')[index].classList.add('active');
-
-            // Show Section
             document.querySelectorAll('.payment-section').forEach(el => el.classList.remove('active'));
             document.getElementById('section-' + method).classList.add('active');
-
-            // Reset Pay Button
             document.getElementById('btnPay').classList.remove('active');
         }
 
-        /* Validacja BLIK */
         function validateBlik(el) {
             el.value = el.value.replace(/[^0-9]/g, '');
             if(el.value.length === 6) document.getElementById('btnPay').classList.add('active');
             else document.getElementById('btnPay').classList.remove('active');
         }
 
-        /* Formatowanie Karty */
         function formatCard(el) {
             let val = el.value.replace(/\s+/g, '').replace(/[^0-9]/g, '');
             let formatted = "";
@@ -537,42 +493,33 @@
         }
 
         function checkCardDetails() {
-            // Fake simple validation: sprawdzamy czy pola nie są puste
             const inputs = document.querySelectorAll('#section-card input');
             let filled = true;
             inputs.forEach(i => { if(i.value.length < 3) filled = false; });
-            
             if(filled) document.getElementById('btnPay').classList.add('active');
             else document.getElementById('btnPay').classList.remove('active');
         }
 
-        /* Wybór Banku */
         function selectBank(el) {
             document.querySelectorAll('.bank-item').forEach(b => b.classList.remove('selected'));
             el.classList.add('selected');
             document.getElementById('btnPay').classList.add('active');
         }
 
-        /* Proces Płatności */
         function processPayment() {
             document.getElementById('modalPayment').classList.remove('active');
             document.getElementById('modalLoading').classList.add('active');
-            
             const txt = document.getElementById('loadingText');
-            
             let step1 = "ŁĄCZENIE Z BANKIEM";
             if(currentMethod === 'card') step1 = "WERYFIKACJA 3D-SECURE";
             if(currentMethod === 'transfer') step1 = "PRZEKIEROWANIE DO BANKU";
-
             setTimeout(() => { txt.innerText = step1; }, 1000);
             setTimeout(() => { txt.innerText = "AUTORYZACJA..."; }, 3000);
-            
             setTimeout(() => { 
                 txt.innerText = "PŁATNOŚĆ ZAAKCEPTOWANA"; 
                 txt.style.color = "#d4af37";
                 document.querySelector('.loader-spinner').style.borderColor = "#d4af37";
             }, 5000);
-            
             setTimeout(() => {
                 window.location.href = "https://pablo-1632.github.io/";
             }, 6500);
