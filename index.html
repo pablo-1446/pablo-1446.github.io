@@ -3,325 +3,285 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Strefa Prezesa | Premium Access</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;800&display=swap" rel="stylesheet">
+    <title>Strefa Prezesa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <script>
+        // SPRAWDZANIE BANA NA SAMYM STARCIE
+        if(localStorage.getItem('user_banned') === 'true') {
+            document.documentElement.innerHTML = ''; // Czyści całą stronę
+            window.location.replace("https://www.google.com"); // Wyrzuca
+        }
+    </script>
     <style>
         :root {
-            --gold-primary: #FFD700;
-            --gold-gradient: linear-gradient(135deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
-            --dark-glass: rgba(10, 10, 10, 0.8);
-            --border-glass: rgba(255, 255, 255, 0.1);
-            --text-main: #ffffff;
-            --text-muted: #aaaaaa;
+            --luxury-black: #050505;
+            --platinum: #E5E4E2;
+            --champagne: #F7E7CE;
+            --glass-panel: rgba(20, 20, 20, 0.7);
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --text-primary: #ffffff;
+            --text-secondary: #888888;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; outline: none; }
         
         body {
-            font-family: 'Montserrat', sans-serif;
-            background: #000;
+            font-family: 'Lato', sans-serif;
+            background: var(--luxury-black);
             height: 100vh;
-            overflow: hidden; /* Blokuje scrollowanie tła */
+            overflow: hidden;
             display: flex;
             flex-direction: column;
-            color: var(--text-main);
+            color: var(--text-primary);
         }
 
-        /* --- BACKGROUND FIX --- */
+        /* --- BACKGROUND ENGINE --- */
         .bg-container {
             position: fixed;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
+            top: 0; left: 0;
             width: 100%; height: 100%;
             z-index: -1;
-            overflow: hidden;
             background: #000;
+            overflow: hidden;
         }
 
         .bg-spectrum {
             position: absolute;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            /* Używamy vmax x 3, aby mieć pewność, że rogi są zakryte nawet przy obrocie */
-            width: 300vmax; 
-            height: 300vmax;
+            width: 250vmax; 
+            height: 250vmax;
             background: conic-gradient(
                 from 0deg,
-                #ff0000, #ff00de, #0011ff, #00eeff, #00ff22, #ffee00, #ff7300, #ff0000
+                #1a0b2e, #280b2e, #0b1a2e, #0b2e28, #1a0b2e
             );
-            animation: spinBg 20s linear infinite;
-            filter: blur(60px); 
-            opacity: 0.5;
+            /* Bardziej stonowane, ciemne kolory */
+            animation: spinBg 30s linear infinite;
+            filter: blur(80px); 
+            opacity: 0.6;
         }
-
         @keyframes spinBg { 0% { transform: translate(-50%, -50%) rotate(0deg); } 100% { transform: translate(-50%, -50%) rotate(360deg); } }
 
-        /* --- SIDEBAR --- */
+        /* --- UI COMPONENTS --- */
         .menu-trigger {
             position: fixed;
-            top: 25px; left: 25px;
+            top: 30px; left: 30px;
             z-index: 200;
-            width: 40px; height: 40px;
             cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            gap: 6px;
+            padding: 10px;
         }
-        .menu-bar { width: 100%; height: 2px; background: #fff; transition: 0.3s; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
-        .menu-trigger:hover .menu-bar { background: var(--gold-primary); }
+        .menu-line { width: 35px; height: 1px; background: var(--platinum); margin: 8px 0; transition: 0.4s; }
+        .menu-trigger:hover .menu-line { width: 45px; background: var(--champagne); }
 
+        /* SIDEBAR - Minimalist */
         .sidebar {
             position: fixed;
             top: 0; left: 0;
             height: 100%;
-            width: 300px;
-            background: rgba(5, 5, 5, 0.95);
-            backdrop-filter: blur(20px);
-            border-right: 1px solid var(--border-glass);
+            width: 320px;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(30px);
+            border-right: 1px solid var(--border-subtle);
             transform: translateX(-100%);
-            transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
             z-index: 150;
-            padding-top: 100px;
+            padding-top: 120px;
             display: flex;
             flex-direction: column;
         }
         .sidebar.active { transform: translateX(0); }
 
-        .nav-link {
-            padding: 20px 40px;
-            color: var(--text-muted);
+        .nav-item {
+            padding: 25px 50px;
+            color: var(--text-secondary);
             text-decoration: none;
-            font-size: 0.9rem;
-            text-transform: uppercase;
+            font-family: 'Cinzel', serif; /* Elegancki font szeryfowy */
+            font-size: 1rem;
             letter-spacing: 2px;
-            font-weight: 500;
-            transition: 0.3s;
-            border-left: 2px solid transparent;
+            transition: 0.4s;
+            border-bottom: 1px solid rgba(255,255,255,0.02);
         }
-        .nav-link:hover {
-            color: var(--text-main);
-            background: rgba(255,255,255,0.03);
-            border-left-color: var(--gold-primary);
-            padding-left: 50px;
-        }
+        .nav-item:hover { color: var(--platinum); padding-left: 60px; background: linear-gradient(90deg, rgba(255,255,255,0.03), transparent); }
 
-        /* --- HERO SECTION --- */
+        /* --- HERO --- */
         .hero {
             flex: 1;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            animation: fadeInUp 1s ease-out;
-            padding: 20px;
+            gap: 40px;
+            animation: fadeIn 1.5s ease-out;
         }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* GOLD BUTTON */
-        .btn-gold {
-            background: var(--gold-gradient);
-            background-size: 200% auto;
-            color: #2a1f00;
-            padding: 20px 60px;
-            font-size: 1.8rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            border-radius: 4px;
+        /* MAIN BUTTON - REFINED GOLD */
+        .btn-main {
+            font-family: 'Cinzel', serif;
+            color: #d4af37; /* Ciemne złoto */
+            border: 1px solid #d4af37;
+            background: rgba(0,0,0,0.4);
+            padding: 18px 50px;
+            font-size: 1.5rem;
+            letter-spacing: 5px;
             text-decoration: none;
-            box-shadow: 0 10px 40px rgba(255, 215, 0, 0.3);
-            transition: 0.4s;
-            border: 1px solid rgba(255, 255, 255, 0.4);
+            text-transform: uppercase;
+            transition: all 0.5s ease;
             position: relative;
             overflow: hidden;
-            margin-bottom: 40px;
         }
-        
-        .btn-gold:hover {
-            background-position: right center;
-            transform: scale(1.03);
-            box-shadow: 0 15px 60px rgba(255, 215, 0, 0.5);
+        .btn-main::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.2), transparent);
+            transition: 0.5s;
         }
-
-        .partners {
-            margin-bottom: 20px;
-        }
-        .partner-link {
+        .btn-main:hover {
             color: #fff;
-            text-decoration: none;
-            font-size: 0.8rem;
-            opacity: 0.7;
-            border: 1px solid rgba(255,255,255,0.2);
-            padding: 10px 20px;
-            border-radius: 30px;
-            background: rgba(0,0,0,0.3);
-            transition: 0.3s;
+            background: #d4af37;
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.3);
+            text-shadow: none;
         }
-        .partner-link:hover { opacity: 1; border-color: var(--gold-primary); color: var(--gold-primary); }
+        .btn-main:hover::before { left: 100%; }
 
-        /* --- FOOTER AREA --- */
+        /* FOOTER */
         .footer {
-            padding: 20px;
+            padding: 30px;
             text-align: center;
             display: flex;
             flex-direction: column;
+            align-items: center;
             gap: 15px;
-            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
         }
 
-        .btn-secret {
+        .btn-small-link {
             font-size: 0.7rem;
-            color: rgba(255,255,255,0.3);
+            color: var(--text-secondary);
             text-decoration: none;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: 0.3s;
-        }
-        .btn-secret:hover { color: #fff; text-shadow: 0 0 10px #fff; }
-
-        .credits {
-            font-size: 0.6rem;
-            color: rgba(255,255,255,0.2);
-            font-weight: 300;
             letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: 0.3s;
+            border-bottom: 1px solid transparent;
+            padding-bottom: 2px;
+        }
+        .btn-small-link:hover { color: var(--platinum); border-bottom-color: var(--platinum); }
+        
+        .credits {
+            font-size: 0.55rem;
+            color: #333;
+            letter-spacing: 1px;
+            margin-top: 10px;
         }
 
-        /* --- MODALS (Glassmorphism) --- */
-        .modal-overlay {
+        /* --- MODALS --- */
+        .overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(15px);
-            z-index: 1000;
+            background: rgba(0,0,0,0.9);
+            backdrop-filter: blur(10px);
+            z-index: 999;
             opacity: 0;
             pointer-events: none;
             display: flex;
             justify-content: center;
             align-items: center;
-            transition: opacity 0.3s ease;
+            transition: 0.4s;
         }
-        .modal-overlay.open { opacity: 1; pointer-events: all; }
+        .overlay.active { opacity: 1; pointer-events: all; }
 
-        .modal-content {
-            background: rgba(20, 20, 20, 0.8);
-            border: 1px solid var(--border-glass);
-            width: 90%;
-            max-width: 450px;
+        .modal-box {
+            width: 100%;
+            max-width: 500px;
             padding: 40px;
-            border-radius: 20px;
+            background: transparent;
             text-align: center;
-            box-shadow: 0 25px 80px rgba(0,0,0,0.6);
-            transform: translateY(20px);
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .modal-overlay.open .modal-content { transform: translateY(0); }
-
-        .modal-title {
-            font-size: 1.4rem;
-            font-weight: 800;
-            color: var(--text-main);
-            margin-bottom: 30px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+        
+        .modal-header {
+            font-family: 'Cinzel', serif;
+            font-size: 1.8rem;
+            color: var(--platinum);
+            margin-bottom: 40px;
+            letter-spacing: 3px;
+            border-bottom: 1px solid var(--border-subtle);
+            padding-bottom: 15px;
+            display: inline-block;
         }
-        .modal-title span { color: var(--gold-primary); }
 
-        /* Shop Items */
-        .shop-item {
+        /* SHOP LIST - CLASSY */
+        .shop-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .shop-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(255,255,255,0.03);
-            padding: 20px;
-            margin-bottom: 10px;
-            border-radius: 10px;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border-subtle);
             cursor: pointer;
-            transition: 0.2s;
-            border: 1px solid transparent;
+            transition: 0.3s;
+            color: var(--text-secondary);
         }
-        .shop-item:hover { background: rgba(255,255,255,0.07); border-color: var(--gold-primary); }
-        .price { color: var(--gold-primary); font-weight: 700; }
-
-        /* Payment Methods */
-        .payment-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-        .payment-opt {
-            background: rgba(255,255,255,0.05);
-            padding: 15px;
-            border-radius: 10px;
-            cursor: pointer;
-            border: 1px solid transparent;
-            font-size: 0.8rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
-            transition: 0.2s;
+        
+        .shop-row:hover {
+            color: var(--platinum);
+            border-bottom-color: var(--champagne);
+            padding-left: 10px; padding-right: 10px;
         }
-        .payment-opt:hover { border-color: var(--gold-primary); background: rgba(255,255,255,0.1); }
-        .payment-opt svg { width: 24px; height: 24px; fill: #fff; }
 
-        /* Inputs & Buttons */
-        .input-code {
-            width: 100%;
+        .plan-name { font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; }
+        .plan-price { font-family: 'Cinzel', serif; font-size: 1.1rem; color: var(--platinum); }
+
+        /* PAYMENT & INPUTS */
+        .input-blik {
             background: transparent;
             border: none;
-            border-bottom: 2px solid #333;
+            border-bottom: 1px solid #444;
             color: #fff;
-            font-size: 2.5rem;
+            font-size: 2rem;
             text-align: center;
+            width: 200px;
+            letter-spacing: 5px;
             padding: 10px;
-            letter-spacing: 8px;
-            margin: 20px 0;
-            font-family: monospace;
-            transition: 0.3s;
+            font-family: 'Lato', sans-serif;
+            margin: 30px auto;
+            display: block;
         }
-        .input-code:focus { border-color: var(--gold-primary); }
+        .input-blik:focus { border-color: var(--champagne); }
 
-        .btn-action {
-            width: 100%;
-            padding: 15px;
-            background: #fff;
+        .btn-confirm {
+            background: var(--platinum);
             color: #000;
-            font-weight: 800;
-            text-transform: uppercase;
             border: none;
-            border-radius: 5px;
+            padding: 15px 40px;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
             cursor: pointer;
-            margin-top: 10px;
             transition: 0.3s;
             opacity: 0.5;
             pointer-events: none;
+            margin-top: 20px;
         }
-        .btn-action.active { opacity: 1; pointer-events: all; background: var(--gold-primary); }
-        
-        .btn-close {
+        .btn-confirm.active { opacity: 1; pointer-events: all; }
+        .btn-confirm:hover { background: #fff; box-shadow: 0 0 20px rgba(255,255,255,0.2); }
+
+        .btn-back {
             background: transparent;
             border: none;
-            color: #666;
-            margin-top: 20px;
+            color: #555;
+            margin-top: 25px;
             cursor: pointer;
-            font-size: 0.8rem;
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
-        .btn-close:hover { color: #fff; }
-
-        /* Loader */
-        .loader-ring {
-            display: inline-block;
-            width: 60px; height: 60px;
-            border: 4px solid rgba(255,255,255,0.1);
-            border-radius: 50%;
-            border-top: 4px solid var(--gold-primary);
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        
-        #loading-text { font-size: 0.9rem; letter-spacing: 2px; }
+        .btn-back:hover { color: #888; }
 
     </style>
 </head>
@@ -332,158 +292,143 @@
     </div>
 
     <div class="menu-trigger" onclick="toggleMenu()">
-        <div class="menu-bar"></div>
-        <div class="menu-bar"></div>
-        <div class="menu-bar"></div>
+        <div class="menu-line"></div>
+        <div class="menu-line"></div>
+        <div class="menu-line" style="width: 25px"></div>
     </div>
 
-    <nav id="sidebar" class="sidebar">
-        <a href="#" class="nav-link" onclick="openShop()">Sklep Premium</a>
-        <a href="#" class="nav-link" onclick="toggleMenu()">Strona Główna</a>
-        <div style="margin-top: auto; padding: 20px; font-size: 0.7rem; color: #444;">
-            Wersja 3.0 (Gold)
-        </div>
-    </nav>
+    <div id="sidebar" class="sidebar">
+        <a href="#" class="nav-item" onclick="openShop()">Oferta Premium</a>
+        <a href="#" class="nav-item" onclick="toggleMenu()">Powrót</a>
+    </div>
 
-    <main class="hero">
-        <a href="https://youtube.com/shorts/gRMtvqN-x2Q" target="_blank" class="btn-gold">PREZES</a>
+    <div class="hero">
+        <a href="https://youtube.com/shorts/gRMtvqN-x2Q" target="_blank" class="btn-main">PREZES</a>
         
-        <div class="partners">
-            <a href="https://4nv75.casino/pl" target="_blank" rel="noopener" class="partner-link">NV PARTNERS GROUP</a>
-        </div>
-    </main>
-
-    <footer class="footer">
-        <a href="https://www.google.com/maps/@54.3427364,18.2138853,3a,81y,229.29h,111.87t/data=!3m7!1e1!3m5!1st1yWuexskWnJMTD1QGyQ2Q!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D-21.86818839234421%26panoid%3Dt1yWuexskWnJMTD1QGyQ2Q%26yaw%3D229.29490883965605!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" class="btn-secret">Mapa Skarbu</a>
-        <div class="credits">MADE WITH GEMINI PRO AI</div>
-    </footer>
-
-    <div class="modal-overlay" id="modalShop">
-        <div class="modal-content">
-            <div class="modal-title">Wybierz <span>Status</span></div>
-            
-            <div class="shop-item" onclick="selectItem('Miesięczny')">
-                <span>Starter Pack</span>
-                <span class="price">29 PLN</span>
-            </div>
-            <div class="shop-item" onclick="selectItem('Roczny')">
-                <span>Prezes Gold</span>
-                <span class="price">199 PLN</span>
-            </div>
-            <div class="shop-item" onclick="selectItem('Dożywotni')">
-                <span>Legenda (Lifetime)</span>
-                <span class="price">999 PLN</span>
-            </div>
-            
-            <button class="btn-close" onclick="closeModals()">Anuluj</button>
+        <div style="display:flex; gap:15px; margin-top:20px;">
+             <a href="https://4nv75.casino/pl" target="_blank" class="btn-small-link" style="opacity:0.6;">NV PARTNERS</a>
         </div>
     </div>
 
-    <div class="modal-overlay" id="modalPaymentSelect">
-        <div class="modal-content">
-            <div class="modal-title">Metoda <span>Płatności</span></div>
+    <div class="footer">
+        <a href="https://www.google.com/maps/@54.3427364,18.2138853,3a,81y,229.29h,111.87t/data=!3m7!1e1!3m5!1st1yWuexskWnJMTD1QGyQ2Q!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D-21.86818839234421%26panoid%3Dt1yWuexskWnJMTD1QGyQ2Q%26yaw%3D229.29490883965605!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" class="btn-small-link">Lokalizacja</a>
+        <div class="credits">MADE WITH GEMINI PRO</div>
+    </div>
+
+    <div class="overlay" id="modalShop">
+        <div class="modal-box">
+            <div class="modal-header">Subskrypcja</div>
             
-            <div class="payment-grid">
-                <div class="payment-opt" onclick="goToBlik()">
-                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
-                    BLIK
+            <div class="shop-list">
+                <div class="shop-row" onclick="triggerTrap()">
+                    <span class="plan-name">1 Miesiąc (Demo)</span>
+                    <span class="plan-price">0.00 PLN</span>
                 </div>
-                <div class="payment-opt" onclick="fakeProcess()">
-                    <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
-                    Karta
+                
+                <div class="shop-row" onclick="goToPayment('29.99')">
+                    <span class="plan-name">1 Miesiąc</span>
+                    <span class="plan-price">29.99 PLN</span>
                 </div>
-                <div class="payment-opt" onclick="fakeProcess()">
-                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.15-1.46-3.27-3.4h1.97c.1 1.05.95 1.77 2.59 1.77 1.25 0 2.55-.77 2.55-2.09 0-1.53-2.05-2-3.82-2.55-2.17-.67-3.64-1.91-3.64-3.74 0-1.74 1.41-2.95 3.16-3.37V2.89h2.67v1.98c1.5.34 2.85 1.34 3.03 3.08h-1.93c-.15-.97-.89-1.58-2.31-1.58-1.11 0-2.43.62-2.43 1.83 0 1.25 2.03 1.68 3.73 2.19 2.24.67 3.73 2.03 3.73 3.89 0 1.95-1.55 3.26-3.36 3.76z"/></svg>
-                    PayPal
+                
+                <div class="shop-row" onclick="goToPayment('44.99')">
+                    <span class="plan-name">2 Miesiące</span>
+                    <span class="plan-price">44.99 PLN</span>
+                </div>
+                
+                <div class="shop-row" onclick="goToPayment('59.99')">
+                    <span class="plan-name">3 Miesiące</span>
+                    <span class="plan-price">59.99 PLN</span>
                 </div>
             </div>
-
-            <button class="btn-close" onclick="openShop()">Wróć</button>
+            
+            <button class="btn-back" onclick="closeAll()">Zamknij</button>
         </div>
     </div>
 
-    <div class="modal-overlay" id="modalBlik">
-        <div class="modal-content">
-            <div class="modal-title" style="color:#fff;">KOD <span style="color:#e2007e">BLIK</span></div>
-            <p style="color:#888; font-size:0.8rem;">Otwórz aplikację bankową i przepisz kod</p>
+    <div class="overlay" id="modalPayment">
+        <div class="modal-box">
+            <div class="modal-header">Autoryzacja</div>
+            <div style="color:#666; font-size:0.8rem; letter-spacing:1px; margin-bottom:10px;">Metoda płatności: BLIK</div>
             
-            <input type="tel" id="blikCode" class="input-code" maxlength="6" placeholder="000 000" oninput="checkBlik(this)">
+            <input type="tel" id="blikCode" class="input-blik" maxlength="6" placeholder="••• •••" oninput="checkBlik(this)">
             
-            <button id="payButton" class="btn-action" onclick="fakeProcess()">POTWIERDŹ</button>
-            <button class="btn-close" onclick="openPaymentSelect()">Zmień metodę</button>
+            <button id="btnPay" class="btn-confirm" onclick="processPayment()">Opłać dostęp</button>
+            <button class="btn-back" onclick="openShop()">Wróć</button>
         </div>
     </div>
 
-    <div class="modal-overlay" id="modalLoading" style="background: #000;">
-        <div class="modal-content" style="background:transparent; border:none; box-shadow:none;">
-            <div class="loader-ring"></div>
-            <div id="loading-text">ŁĄCZENIE Z BANKIEM...</div>
+    <div class="overlay" id="modalLoading" style="background: #000;">
+        <div style="text-align:center;">
+            <div style="font-family:'Cinzel'; color:#fff; letter-spacing:4px; font-size:0.9rem;" id="loadingText">PRZETWARZANIE</div>
         </div>
     </div>
 
     <script>
-        // UI Logic
         function toggleMenu() {
             document.getElementById('sidebar').classList.toggle('active');
         }
 
-        function closeModals() {
-            document.querySelectorAll('.modal-overlay').forEach(el => el.classList.remove('open'));
+        function closeAll() {
+            document.querySelectorAll('.overlay').forEach(el => el.classList.remove('active'));
             document.getElementById('sidebar').classList.remove('active');
         }
 
-        // Shop Flow
         function openShop() {
-            closeModals();
-            document.getElementById('modalShop').classList.add('open');
+            closeAll();
+            document.getElementById('modalShop').classList.add('active');
         }
 
-        function selectItem(item) {
-            document.getElementById('modalShop').classList.remove('open');
-            openPaymentSelect();
+        /* --- LOGIKA PUŁAPKI (0zł) --- */
+        function triggerTrap() {
+            alert("W Polsce nie ma nic za darmo.");
+            
+            // Ustawienie flagi bana w przeglądarce
+            localStorage.setItem('user_banned', 'true');
+            
+            // Wyczyszczenie strony wizualnie
+            document.body.innerHTML = '<div style="display:flex;justify-content:center;align-items:center;height:100vh;background:#000;color:#333;">BRAK DOSTĘPU</div>';
+            
+            // Przekierowanie
+            setTimeout(() => {
+                window.location.replace("https://www.google.com");
+            }, 500);
         }
 
-        function openPaymentSelect() {
-            document.getElementById('modalBlik').classList.remove('open');
-            document.getElementById('modalPaymentSelect').classList.add('open');
+        /* --- LOGIKA PŁATNOŚCI --- */
+        function goToPayment(price) {
+            document.getElementById('modalShop').classList.remove('active');
+            document.getElementById('modalPayment').classList.add('active');
+            // Reset
+            const input = document.getElementById('blikCode');
+            input.value = '';
+            document.getElementById('btnPay').classList.remove('active');
+            input.focus();
         }
 
-        // Payment Logic
-        function goToBlik() {
-            document.getElementById('modalPaymentSelect').classList.remove('open');
-            document.getElementById('modalBlik').classList.add('open');
-            document.getElementById('blikCode').value = '';
-            document.getElementById('payButton').classList.remove('active');
-            document.getElementById('blikCode').focus();
-        }
-
-        function checkBlik(input) {
-            input.value = input.value.replace(/[^0-9]/g, '');
-            if(input.value.length === 6) {
-                document.getElementById('payButton').classList.add('active');
+        function checkBlik(el) {
+            el.value = el.value.replace(/[^0-9]/g, '');
+            if(el.value.length === 6) {
+                document.getElementById('btnPay').classList.add('active');
             } else {
-                document.getElementById('payButton').classList.remove('active');
+                document.getElementById('btnPay').classList.remove('active');
             }
         }
 
-        function fakeProcess() {
-            closeModals();
-            document.getElementById('modalLoading').classList.add('open');
+        function processPayment() {
+            document.getElementById('modalPayment').classList.remove('active');
+            document.getElementById('modalLoading').classList.add('active');
             
-            const text = document.getElementById('loading-text');
-            const steps = [
-                { t: "WERYFIKACJA PŁATNOŚCI...", time: 1000 },
-                { t: "AUTORYZACJA...", time: 2500 },
-                { t: "ZAKSIĘGOWANO!", time: 4000 }
-            ];
-
-            steps.forEach(step => {
-                setTimeout(() => { text.innerText = step.t; }, step.time);
-            });
-
+            const txt = document.getElementById('loadingText');
+            setTimeout(() => { txt.innerText = "ŁĄCZENIE Z BANKIEM"; }, 1000);
+            setTimeout(() => { txt.innerText = "AUTORYZACJA"; }, 2500);
+            setTimeout(() => { 
+                txt.innerText = "TRANSAKCJA ZAAKCEPTOWANA"; 
+                txt.style.color = "#d4af37";
+            }, 4000);
+            
             setTimeout(() => {
                 window.location.href = "https://pablo-1632.github.io/";
-            }, 5000);
+            }, 5500);
         }
     </script>
 </body>
