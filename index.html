@@ -3,454 +3,487 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Strefa Prezesa 2.0 - Ultimate Edition</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;600;900&display=swap" rel="stylesheet">
+    <title>Strefa Prezesa | Premium Access</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --accent-color: #FFD700;
-            --accent-gradient: linear-gradient(135deg, #FFD700 0%, #FDB931 100%);
-            --mystery-gradient: linear-gradient(135deg, #2b0a3d 0%, #000000 100%);
-            --text-color: #ffffff;
-            --glass-bg: rgba(20, 20, 20, 0.85);
-            --border-color: rgba(255, 215, 0, 0.3);
-            --shadow-color: rgba(255, 215, 0, 0.4);
+            --gold-primary: #FFD700;
+            --gold-gradient: linear-gradient(135deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
+            --dark-glass: rgba(10, 10, 10, 0.8);
+            --border-glass: rgba(255, 255, 255, 0.1);
+            --text-main: #ffffff;
+            --text-muted: #aaaaaa;
         }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; outline: none; }
         
         body {
-            font-family: 'Inter', sans-serif;
-            color: var(--text-color);
+            font-family: 'Montserrat', sans-serif;
             background: #000;
             height: 100vh;
-            overflow: hidden;
+            overflow: hidden; /* Blokuje scrollowanie tła */
             display: flex;
             flex-direction: column;
-            position: relative;
+            color: var(--text-main);
         }
 
-        /* --- Animated Spectrum Background --- */
+        /* --- BACKGROUND FIX --- */
+        .bg-container {
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%; height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            background: #000;
+        }
+
         .bg-spectrum {
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            /* Używamy vmax x 3, aby mieć pewność, że rogi są zakryte nawet przy obrocie */
+            width: 300vmax; 
+            height: 300vmax;
             background: conic-gradient(
                 from 0deg,
-                #ff0000, #ff8000, #ffff00, #00ff00, #00ffff, #0000ff, #8000ff, #ff0000
+                #ff0000, #ff00de, #0011ff, #00eeff, #00ff22, #ffee00, #ff7300, #ff0000
             );
-            animation: spinSpectrum 10s linear infinite;
-            filter: blur(80px);
-            opacity: 0.4;
-            z-index: -1;
+            animation: spinBg 20s linear infinite;
+            filter: blur(60px); 
+            opacity: 0.5;
         }
 
-        @keyframes spinSpectrum {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        @keyframes spinBg { 0% { transform: translate(-50%, -50%) rotate(0deg); } 100% { transform: translate(-50%, -50%) rotate(360deg); } }
 
-        /* --- UI Elements --- */
-        .menu-btn {
+        /* --- SIDEBAR --- */
+        .menu-trigger {
             position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 100;
-            font-size: 1.8rem;
+            top: 25px; left: 25px;
+            z-index: 200;
+            width: 40px; height: 40px;
             cursor: pointer;
-            background: var(--glass-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            padding: 8px 12px;
-            border-radius: 10px;
-            transition: 0.3s;
-            backdrop-filter: blur(5px);
-        }
-
-        .menu-btn:hover { box-shadow: 0 0 15px var(--accent-color); }
-
-        /* --- Sidebar --- */
-        .sidebar {
-            height: 100%;
-            width: 280px;
-            position: fixed;
-            z-index: 99;
-            top: 0;
-            left: -280px;
-            background: rgba(10, 10, 10, 0.95);
-            backdrop-filter: blur(20px);
-            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            padding-top: 100px;
-            border-right: 1px solid var(--border-color);
-        }
-
-        .sidebar.open { left: 0; }
-
-        .sidebar-item {
-            padding: 20px 30px;
-            font-size: 1.1rem;
-            color: #ddd;
             display: flex;
-            align-items: center;
-            gap: 15px;
-            transition: 0.3s;
-            cursor: pointer;
-            text-decoration: none;
-            text-transform: uppercase;
-            font-weight: 600;
-            letter-spacing: 1px;
-            border-left: 3px solid transparent;
-        }
-
-        .sidebar-item:hover {
-            color: var(--accent-color);
-            background: rgba(255,255,255,0.05);
-            padding-left: 40px;
-            border-left: 3px solid var(--accent-color);
-        }
-
-        /* --- Main Hero --- */
-        .hero-section {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             flex-direction: column;
-            padding: 20px;
-            gap: 30px;
+            justify-content: center;
+            gap: 6px;
         }
+        .menu-bar { width: 100%; height: 2px; background: #fff; transition: 0.3s; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
+        .menu-trigger:hover .menu-bar { background: var(--gold-primary); }
 
-        .btn-prezes {
-            background: var(--accent-gradient);
-            color: #111;
-            padding: clamp(15px, 4vw, 25px) clamp(30px, 8vw, 60px);
-            font-size: clamp(1.2rem, 5vw, 2.2rem);
-            font-weight: 900;
+        .sidebar {
+            position: fixed;
+            top: 0; left: 0;
+            height: 100%;
+            width: 300px;
+            background: rgba(5, 5, 5, 0.95);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid var(--border-glass);
+            transform: translateX(-100%);
+            transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+            z-index: 150;
+            padding-top: 100px;
+            display: flex;
+            flex-direction: column;
+        }
+        .sidebar.active { transform: translateX(0); }
+
+        .nav-link {
+            padding: 20px 40px;
+            color: var(--text-muted);
             text-decoration: none;
-            border-radius: 50px;
-            box-shadow: 0 0 30px var(--shadow-color);
+            font-size: 0.9rem;
             text-transform: uppercase;
             letter-spacing: 2px;
-            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 2px solid rgba(255,255,255,0.3);
-            text-align: center;
+            font-weight: 500;
+            transition: 0.3s;
+            border-left: 2px solid transparent;
+        }
+        .nav-link:hover {
+            color: var(--text-main);
+            background: rgba(255,255,255,0.03);
+            border-left-color: var(--gold-primary);
+            padding-left: 50px;
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            animation: fadeInUp 1s ease-out;
+            padding: 20px;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* GOLD BUTTON */
+        .btn-gold {
+            background: var(--gold-gradient);
+            background-size: 200% auto;
+            color: #2a1f00;
+            padding: 20px 60px;
+            font-size: 1.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            border-radius: 4px;
+            text-decoration: none;
+            box-shadow: 0 10px 40px rgba(255, 215, 0, 0.3);
+            transition: 0.4s;
+            border: 1px solid rgba(255, 255, 255, 0.4);
             position: relative;
             overflow: hidden;
+            margin-bottom: 40px;
+        }
+        
+        .btn-gold:hover {
+            background-position: right center;
+            transform: scale(1.03);
+            box-shadow: 0 15px 60px rgba(255, 215, 0, 0.5);
         }
 
-        .btn-prezes:hover { 
-            transform: scale(1.05); 
-            box-shadow: 0 10px 50px var(--accent-color); 
+        .partners {
+            margin-bottom: 20px;
         }
-
-        /* Mystery Button Style */
-        .btn-mystery {
-            background: var(--mystery-gradient);
-            color: #bfa1ce;
-            padding: 15px 30px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            text-decoration: none;
-            border-radius: 15px;
-            border: 1px solid #4a1c6e;
-            box-shadow: 0 0 15px rgba(74, 28, 110, 0.5);
-            transition: 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 10px;
-        }
-
-        .btn-mystery:hover {
-            background: #4a1c6e;
+        .partner-link {
             color: #fff;
-            box-shadow: 0 0 25px #8a2be2;
-            transform: translateY(-2px);
+            text-decoration: none;
+            font-size: 0.8rem;
+            opacity: 0.7;
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 30px;
+            background: rgba(0,0,0,0.3);
+            transition: 0.3s;
         }
+        .partner-link:hover { opacity: 1; border-color: var(--gold-primary); color: var(--gold-primary); }
 
-        /* --- Partners --- */
-        .bottom-bar {
+        /* --- FOOTER AREA --- */
+        .footer {
             padding: 20px;
             text-align: center;
-            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
         }
 
-        .partner-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 12px 24px;
-            background: rgba(0,0,0,0.6);
-            color: var(--accent-color);
-            border: 1px solid var(--border-color);
+        .btn-secret {
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.3);
             text-decoration: none;
-            border-radius: 12px;
-            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
             transition: 0.3s;
-            min-height: 48px;
-            backdrop-filter: blur(5px);
         }
-        .partner-btn:hover { background: var(--accent-color); color: #000; box-shadow: 0 0 20px var(--shadow-color); }
+        .btn-secret:hover { color: #fff; text-shadow: 0 0 10px #fff; }
 
-        /* --- Modals --- */
-        .overlay {
+        .credits {
+            font-size: 0.6rem;
+            color: rgba(255,255,255,0.2);
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+
+        /* --- MODALS (Glassmorphism) --- */
+        .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(0,0,0,0.8);
             backdrop-filter: blur(15px);
             z-index: 1000;
             opacity: 0;
             pointer-events: none;
-            transition: 0.3s;
             display: flex;
             justify-content: center;
             align-items: center;
+            transition: opacity 0.3s ease;
         }
+        .modal-overlay.open { opacity: 1; pointer-events: all; }
 
-        .overlay.active { opacity: 1; pointer-events: all; }
-
-        .modal-box {
-            background: #111;
+        .modal-content {
+            background: rgba(20, 20, 20, 0.8);
+            border: 1px solid var(--border-glass);
             width: 90%;
-            max-width: 420px;
-            padding: 30px;
-            border-radius: 24px;
-            border: 1px solid var(--border-color);
+            max-width: 450px;
+            padding: 40px;
+            border-radius: 20px;
             text-align: center;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            box-shadow: 0 25px 80px rgba(0,0,0,0.6);
+            transform: translateY(20px);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
+        .modal-overlay.open .modal-content { transform: translateY(0); }
 
         .modal-title {
-            font-size: 1.6rem;
-            margin-bottom: 25px;
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 30px;
             text-transform: uppercase;
-            font-weight: 900;
-            color: var(--accent-color);
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+            letter-spacing: 2px;
         }
+        .modal-title span { color: var(--gold-primary); }
 
-        .shop-option {
-            background: rgba(255,255,255,0.05);
-            margin: 12px 0;
-            padding: 18px;
-            border-radius: 15px;
-            cursor: pointer;
+        /* Shop Items */
+        .shop-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            background: rgba(255,255,255,0.03);
+            padding: 20px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            cursor: pointer;
             transition: 0.2s;
             border: 1px solid transparent;
         }
+        .shop-item:hover { background: rgba(255,255,255,0.07); border-color: var(--gold-primary); }
+        .price { color: var(--gold-primary); font-weight: 700; }
 
-        .shop-option:hover {
-            border-color: var(--accent-color);
-            background: rgba(255,215,0,0.1);
-            transform: translateX(5px);
-        }
-
-        .best-value {
-            font-size: 0.7rem;
-            background: var(--accent-color);
-            color: #000;
-            padding: 2px 6px;
-            border-radius: 4px;
-            margin-right: 8px;
-            font-weight: bold;
-        }
-
-        /* --- BLIK --- */
-        .blik-input {
-            width: 100%;
+        /* Payment Methods */
+        .payment-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .payment-opt {
+            background: rgba(255,255,255,0.05);
             padding: 15px;
-            font-size: 2rem;
-            text-align: center;
-            background: #000;
-            border: 2px solid #333;
-            border-radius: 12px;
-            color: var(--text-color);
-            outline: none;
-            margin: 15px 0;
-            letter-spacing: 5px;
-            font-family: monospace;
-        }
-
-        .blik-input:focus { border-color: #e2007e; }
-
-        .confirm-btn {
-            background: var(--accent-gradient);
-            color: #000;
-            padding: 15px;
-            font-weight: 900;
             border-radius: 10px;
-            width: 100%;
-            border: none;
             cursor: pointer;
+            border: 1px solid transparent;
+            font-size: 0.8rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            transition: 0.2s;
+        }
+        .payment-opt:hover { border-color: var(--gold-primary); background: rgba(255,255,255,0.1); }
+        .payment-opt svg { width: 24px; height: 24px; fill: #fff; }
+
+        /* Inputs & Buttons */
+        .input-code {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid #333;
+            color: #fff;
+            font-size: 2.5rem;
+            text-align: center;
+            padding: 10px;
+            letter-spacing: 8px;
+            margin: 20px 0;
+            font-family: monospace;
+            transition: 0.3s;
+        }
+        .input-code:focus { border-color: var(--gold-primary); }
+
+        .btn-action {
+            width: 100%;
+            padding: 15px;
+            background: #fff;
+            color: #000;
+            font-weight: 800;
+            text-transform: uppercase;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.3s;
             opacity: 0.5;
             pointer-events: none;
-            transition: 0.3s;
-            text-transform: uppercase;
         }
-
-        .confirm-btn.ready { opacity: 1; pointer-events: all; }
-        .confirm-btn.ready:hover { box-shadow: 0 0 20px var(--shadow-color); }
-
-        .close-btn {
+        .btn-action.active { opacity: 1; pointer-events: all; background: var(--gold-primary); }
+        
+        .btn-close {
             background: transparent;
-            color: #666;
             border: none;
+            color: #666;
             margin-top: 20px;
             cursor: pointer;
-            font-size: 0.9rem;
-            text-decoration: underline;
+            font-size: 0.8rem;
         }
+        .btn-close:hover { color: #fff; }
 
-        /* --- Loader --- */
-        .loader {
+        /* Loader */
+        .loader-ring {
+            display: inline-block;
             width: 60px; height: 60px;
-            border: 4px solid rgba(255,215,0,0.1);
-            border-top: 4px solid var(--accent-color);
+            border: 4px solid rgba(255,255,255,0.1);
             border-radius: 50%;
+            border-top: 4px solid var(--gold-primary);
             animation: spin 1s linear infinite;
-            margin: 0 auto 25px;
-            box-shadow: 0 0 20px var(--shadow-color);
+            margin-bottom: 20px;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
+        
+        #loading-text { font-size: 0.9rem; letter-spacing: 2px; }
 
-        /* PC Optimization */
-        @media (min-width: 1024px) {
-            .sidebar-item { padding: 25px 40px; }
-            .modal-box { padding: 40px; }
-            .btn-prezes { font-size: 2.5rem; }
-        }
     </style>
 </head>
 <body>
 
-    <div class="bg-spectrum"></div>
-
-    <button class="menu-btn" onclick="toggleSidebar()">☰</button>
-
-    <div id="sidebar" class="sidebar">
-        <div class="sidebar-item" onclick="openShop()">🛒 Sklep Premium</div>
-        <a href="https://pablo-1446.github.io/" class="sidebar-item">⭐ Polecane Strony</a>
-        <div class="sidebar-item" onclick="toggleSidebar()">🏠 Strona Główna</div>
+    <div class="bg-container">
+        <div class="bg-spectrum"></div>
     </div>
 
-    <div class="hero-section">
-        <a href="https://youtube.com/shorts/gRMtvqN-x2Q" target="_blank" class="btn-prezes">PREZES 👑</a>
+    <div class="menu-trigger" onclick="toggleMenu()">
+        <div class="menu-bar"></div>
+        <div class="menu-bar"></div>
+        <div class="menu-bar"></div>
+    </div>
+
+    <nav id="sidebar" class="sidebar">
+        <a href="#" class="nav-link" onclick="openShop()">Sklep Premium</a>
+        <a href="#" class="nav-link" onclick="toggleMenu()">Strona Główna</a>
+        <div style="margin-top: auto; padding: 20px; font-size: 0.7rem; color: #444;">
+            Wersja 3.0 (Gold)
+        </div>
+    </nav>
+
+    <main class="hero">
+        <a href="https://youtube.com/shorts/gRMtvqN-x2Q" target="_blank" class="btn-gold">PREZES</a>
         
-        <a href="https://www.google.com/maps/@54.3427364,18.2138853,3a,81y,229.29h,111.87t/data=!3m7!1e1!3m5!1st1yWuexskWnJMTD1QGyQ2Q!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D-21.86818839234421%26panoid%3Dt1yWuexskWnJMTD1QGyQ2Q%26yaw%3D229.29490883965605!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" class="btn-mystery">👁️ Kto ma wiedzieć ten wie</a>
-
-        <div class="bottom-bar">
-            <a href="https://4nv75.casino/pl" target="_blank" rel="noopener" class="partner-btn">NV Partners Group</a>
+        <div class="partners">
+            <a href="https://4nv75.casino/pl" target="_blank" rel="noopener" class="partner-link">NV PARTNERS GROUP</a>
         </div>
-    </div>
+    </main>
 
-    <div class="overlay" id="shopModal">
-        <div class="modal-box">
-            <div class="modal-title">💎 Wybierz Pakiet</div>
+    <footer class="footer">
+        <a href="https://www.google.com/maps/@54.3427364,18.2138853,3a,81y,229.29h,111.87t/data=!3m7!1e1!3m5!1st1yWuexskWnJMTD1QGyQ2Q!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D-21.86818839234421%26panoid%3Dt1yWuexskWnJMTD1QGyQ2Q%26yaw%3D229.29490883965605!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" class="btn-secret">Mapa Skarbu</a>
+        <div class="credits">MADE WITH GEMINI PRO AI</div>
+    </footer>
+
+    <div class="modal-overlay" id="modalShop">
+        <div class="modal-content">
+            <div class="modal-title">Wybierz <span>Status</span></div>
             
-            <div class="shop-option" onclick="startPayment()">
-                <span>1 Miesiąc</span>
-                <span style="color:var(--accent-color)">29.99 PLN</span>
+            <div class="shop-item" onclick="selectItem('Miesięczny')">
+                <span>Starter Pack</span>
+                <span class="price">29 PLN</span>
+            </div>
+            <div class="shop-item" onclick="selectItem('Roczny')">
+                <span>Prezes Gold</span>
+                <span class="price">199 PLN</span>
+            </div>
+            <div class="shop-item" onclick="selectItem('Dożywotni')">
+                <span>Legenda (Lifetime)</span>
+                <span class="price">999 PLN</span>
             </div>
             
-            <div class="shop-option" onclick="startPayment()">
-                <span>3 Miesiące <span class="best-value">-10%</span></span>
-                <span style="color:var(--accent-color)">59.99 PLN</span>
-            </div>
-
-            <div class="shop-option" onclick="startPayment()">
-                <span>👑 VIP na Rok</span>
-                <span style="color:var(--accent-color)">199.00 PLN</span>
-            </div>
-
-            <div class="shop-option" onclick="startPayment()" style="border-color: #e2007e;">
-                <span>🐐 Dożywotni Prezes</span>
-                <span style="color:var(--accent-color)">999.00 PLN</span>
-            </div>
-
-            <button class="close-btn" onclick="closeAllModals()">Anuluj</button>
+            <button class="btn-close" onclick="closeModals()">Anuluj</button>
         </div>
     </div>
 
-    <div class="overlay" id="blikModal">
-        <div class="modal-box">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/7/76/Blik_logo.svg" alt="BLIK" style="height: 40px; margin-bottom: 20px;">
-            <p style="color: #aaa; margin-bottom: 10px;">Wprowadź kod z aplikacji bankowej</p>
-            <input type="tel" id="blikCode" class="blik-input" maxlength="6" placeholder="000000" oninput="validateBlik(this)">
-            <button id="blikConfirm" class="confirm-btn" onclick="processBlik()">POTWIERDŹ PŁATNOŚĆ</button>
-            <button class="close-btn" onclick="closeAllModals()">Zmień metodę płatności</button>
+    <div class="modal-overlay" id="modalPaymentSelect">
+        <div class="modal-content">
+            <div class="modal-title">Metoda <span>Płatności</span></div>
+            
+            <div class="payment-grid">
+                <div class="payment-opt" onclick="goToBlik()">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                    BLIK
+                </div>
+                <div class="payment-opt" onclick="fakeProcess()">
+                    <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
+                    Karta
+                </div>
+                <div class="payment-opt" onclick="fakeProcess()">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.15-1.46-3.27-3.4h1.97c.1 1.05.95 1.77 2.59 1.77 1.25 0 2.55-.77 2.55-2.09 0-1.53-2.05-2-3.82-2.55-2.17-.67-3.64-1.91-3.64-3.74 0-1.74 1.41-2.95 3.16-3.37V2.89h2.67v1.98c1.5.34 2.85 1.34 3.03 3.08h-1.93c-.15-.97-.89-1.58-2.31-1.58-1.11 0-2.43.62-2.43 1.83 0 1.25 2.03 1.68 3.73 2.19 2.24.67 3.73 2.03 3.73 3.89 0 1.95-1.55 3.26-3.36 3.76z"/></svg>
+                    PayPal
+                </div>
+            </div>
+
+            <button class="btn-close" onclick="openShop()">Wróć</button>
         </div>
     </div>
 
-    <div class="overlay" id="loadingModal" style="background: rgba(0,0,0,0.98);">
-        <div class="modal-box" style="background:transparent; border:none; box-shadow:none;">
-            <div class="loader"></div>
-            <div id="statusText" style="letter-spacing:3px; font-weight:900; color:var(--accent-color);">ŁĄCZENIE Z BANKIEM...</div>
+    <div class="modal-overlay" id="modalBlik">
+        <div class="modal-content">
+            <div class="modal-title" style="color:#fff;">KOD <span style="color:#e2007e">BLIK</span></div>
+            <p style="color:#888; font-size:0.8rem;">Otwórz aplikację bankową i przepisz kod</p>
+            
+            <input type="tel" id="blikCode" class="input-code" maxlength="6" placeholder="000 000" oninput="checkBlik(this)">
+            
+            <button id="payButton" class="btn-action" onclick="fakeProcess()">POTWIERDŹ</button>
+            <button class="btn-close" onclick="openPaymentSelect()">Zmień metodę</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modalLoading" style="background: #000;">
+        <div class="modal-content" style="background:transparent; border:none; box-shadow:none;">
+            <div class="loader-ring"></div>
+            <div id="loading-text">ŁĄCZENIE Z BANKIEM...</div>
         </div>
     </div>
 
     <script>
-        function toggleSidebar() {
-            document.getElementById("sidebar").classList.toggle("open");
+        // UI Logic
+        function toggleMenu() {
+            document.getElementById('sidebar').classList.toggle('active');
         }
 
-        function closeAllModals() {
-            document.querySelectorAll('.overlay').forEach(m => m.classList.remove('active'));
-            document.getElementById("sidebar").classList.remove("open");
+        function closeModals() {
+            document.querySelectorAll('.modal-overlay').forEach(el => el.classList.remove('open'));
+            document.getElementById('sidebar').classList.remove('active');
         }
 
+        // Shop Flow
         function openShop() {
-            closeAllModals();
-            document.getElementById("shopModal").classList.add("active");
+            closeModals();
+            document.getElementById('modalShop').classList.add('open');
         }
 
-        function startPayment() {
-            document.getElementById("shopModal").classList.remove("active");
-            document.getElementById("blikModal").classList.add("active");
-            // Reset input
-            const input = document.getElementById("blikCode");
-            input.value = '';
-            validateBlik(input);
-            input.focus();
+        function selectItem(item) {
+            document.getElementById('modalShop').classList.remove('open');
+            openPaymentSelect();
         }
 
-        function validateBlik(input) {
+        function openPaymentSelect() {
+            document.getElementById('modalBlik').classList.remove('open');
+            document.getElementById('modalPaymentSelect').classList.add('open');
+        }
+
+        // Payment Logic
+        function goToBlik() {
+            document.getElementById('modalPaymentSelect').classList.remove('open');
+            document.getElementById('modalBlik').classList.add('open');
+            document.getElementById('blikCode').value = '';
+            document.getElementById('payButton').classList.remove('active');
+            document.getElementById('blikCode').focus();
+        }
+
+        function checkBlik(input) {
             input.value = input.value.replace(/[^0-9]/g, '');
-            const btn = document.getElementById('blikConfirm');
             if(input.value.length === 6) {
-                btn.classList.add('ready');
+                document.getElementById('payButton').classList.add('active');
             } else {
-                btn.classList.remove('ready');
+                document.getElementById('payButton').classList.remove('active');
             }
         }
 
-        function processBlik() {
-            document.getElementById("blikModal").classList.remove("active");
-            document.getElementById("loadingModal").classList.add("active");
+        function fakeProcess() {
+            closeModals();
+            document.getElementById('modalLoading').classList.add('open');
             
-            const status = document.getElementById("statusText");
-            
-            setTimeout(() => { status.innerText = "WERYFIKACJA KODU..."; }, 1000);
-            setTimeout(() => { status.innerText = "AUTORYZACJA..."; }, 2500);
-            
-            setTimeout(() => { 
-                status.innerText = "SUKCES! PRZEKIEROWANIE..."; 
-                status.style.color = "#00ff00"; 
-            }, 4000);
-            
-            // Przekierowanie do linku po "zakupie"
+            const text = document.getElementById('loading-text');
+            const steps = [
+                { t: "WERYFIKACJA PŁATNOŚCI...", time: 1000 },
+                { t: "AUTORYZACJA...", time: 2500 },
+                { t: "ZAKSIĘGOWANO!", time: 4000 }
+            ];
+
+            steps.forEach(step => {
+                setTimeout(() => { text.innerText = step.t; }, step.time);
+            });
+
             setTimeout(() => {
-                window.location.href = "https://pablo-1632.github.io/"; 
-            }, 5500);
-        }
-
-        // Close on outside click
-        window.onclick = function(e) {
-            if (e.target.classList.contains('overlay') && e.target.id !== 'loadingModal') {
-                closeAllModals();
-            }
+                window.location.href = "https://pablo-1632.github.io/";
+            }, 5000);
         }
     </script>
 </body>
