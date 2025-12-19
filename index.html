@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Strefa Prezesa 2.0</title>
+    <title>Strefa Prezesa 2.0 - Ultimate Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;600;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-gradient: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #1a0b2e);
             --accent-color: #FFD700;
             --accent-gradient: linear-gradient(135deg, #FFD700 0%, #FDB931 100%);
+            --mystery-gradient: linear-gradient(135deg, #2b0a3d 0%, #000000 100%);
             --text-color: #ffffff;
-            --glass-bg: rgba(20, 20, 20, 0.9);
+            --glass-bg: rgba(20, 20, 20, 0.85);
             --border-color: rgba(255, 215, 0, 0.3);
             --shadow-color: rgba(255, 215, 0, 0.4);
         }
@@ -21,19 +21,34 @@
         body {
             font-family: 'Inter', sans-serif;
             color: var(--text-color);
-            background: var(--bg-gradient);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+            background: #000;
             height: 100vh;
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            position: relative;
         }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        /* --- Animated Spectrum Background --- */
+        .bg-spectrum {
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(
+                from 0deg,
+                #ff0000, #ff8000, #ffff00, #00ff00, #00ffff, #0000ff, #8000ff, #ff0000
+            );
+            animation: spinSpectrum 10s linear infinite;
+            filter: blur(80px);
+            opacity: 0.4;
+            z-index: -1;
+        }
+
+        @keyframes spinSpectrum {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         /* --- UI Elements --- */
@@ -50,7 +65,10 @@
             padding: 8px 12px;
             border-radius: 10px;
             transition: 0.3s;
+            backdrop-filter: blur(5px);
         }
+
+        .menu-btn:hover { box-shadow: 0 0 15px var(--accent-color); }
 
         /* --- Sidebar --- */
         .sidebar {
@@ -60,8 +78,8 @@
             z-index: 99;
             top: 0;
             left: -280px;
-            background: var(--glass-bg);
-            backdrop-filter: blur(15px);
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
             transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             padding-top: 100px;
             border-right: 1px solid var(--border-color);
@@ -78,15 +96,18 @@
             gap: 15px;
             transition: 0.3s;
             cursor: pointer;
+            text-decoration: none;
             text-transform: uppercase;
             font-weight: 600;
             letter-spacing: 1px;
+            border-left: 3px solid transparent;
         }
 
         .sidebar-item:hover {
             color: var(--accent-color);
             background: rgba(255,255,255,0.05);
             padding-left: 40px;
+            border-left: 3px solid var(--accent-color);
         }
 
         /* --- Main Hero --- */
@@ -97,6 +118,7 @@
             align-items: center;
             flex-direction: column;
             padding: 20px;
+            gap: 30px;
         }
 
         .btn-prezes {
@@ -113,9 +135,38 @@
             transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             border: 2px solid rgba(255,255,255,0.3);
             text-align: center;
+            position: relative;
+            overflow: hidden;
         }
 
-        .btn-prezes:hover { transform: scale(1.05); box-shadow: 0 10px 40px var(--shadow-color); }
+        .btn-prezes:hover { 
+            transform: scale(1.05); 
+            box-shadow: 0 10px 50px var(--accent-color); 
+        }
+
+        /* Mystery Button Style */
+        .btn-mystery {
+            background: var(--mystery-gradient);
+            color: #bfa1ce;
+            padding: 15px 30px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 15px;
+            border: 1px solid #4a1c6e;
+            box-shadow: 0 0 15px rgba(74, 28, 110, 0.5);
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 10px;
+        }
+
+        .btn-mystery:hover {
+            background: #4a1c6e;
+            color: #fff;
+            box-shadow: 0 0 25px #8a2be2;
+            transform: translateY(-2px);
+        }
 
         /* --- Partners --- */
         .bottom-bar {
@@ -137,15 +188,16 @@
             font-weight: bold;
             transition: 0.3s;
             min-height: 48px;
+            backdrop-filter: blur(5px);
         }
-        .partner-btn:hover { background: var(--accent-color); color: #000; }
+        .partner-btn:hover { background: var(--accent-color); color: #000; box-shadow: 0 0 20px var(--shadow-color); }
 
         /* --- Modals --- */
         .overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(15px);
             z-index: 1000;
             opacity: 0;
             pointer-events: none;
@@ -160,36 +212,50 @@
         .modal-box {
             background: #111;
             width: 90%;
-            max-width: 400px;
+            max-width: 420px;
             padding: 30px;
             border-radius: 24px;
             border: 1px solid var(--border-color);
             text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
         }
 
         .modal-title {
-            font-size: 1.4rem;
-            margin-bottom: 20px;
+            font-size: 1.6rem;
+            margin-bottom: 25px;
             text-transform: uppercase;
             font-weight: 900;
             color: var(--accent-color);
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
         }
 
         .shop-option {
             background: rgba(255,255,255,0.05);
-            margin: 10px 0;
+            margin: 12px 0;
             padding: 18px;
             border-radius: 15px;
             cursor: pointer;
             display: flex;
             justify-content: space-between;
+            align-items: center;
             transition: 0.2s;
             border: 1px solid transparent;
         }
 
         .shop-option:hover {
             border-color: var(--accent-color);
-            background: rgba(255,255,255,0.1);
+            background: rgba(255,215,0,0.1);
+            transform: translateX(5px);
+        }
+
+        .best-value {
+            font-size: 0.7rem;
+            background: var(--accent-color);
+            color: #000;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-right: 8px;
+            font-weight: bold;
         }
 
         /* --- BLIK --- */
@@ -201,43 +267,52 @@
             background: #000;
             border: 2px solid #333;
             border-radius: 12px;
-            color: var(--accent-color);
+            color: var(--text-color);
             outline: none;
             margin: 15px 0;
+            letter-spacing: 5px;
+            font-family: monospace;
         }
+
+        .blik-input:focus { border-color: #e2007e; }
 
         .confirm-btn {
             background: var(--accent-gradient);
             color: #000;
             padding: 15px;
-            font-weight: bold;
+            font-weight: 900;
             border-radius: 10px;
             width: 100%;
             border: none;
             cursor: pointer;
             opacity: 0.5;
             pointer-events: none;
+            transition: 0.3s;
+            text-transform: uppercase;
         }
 
         .confirm-btn.ready { opacity: 1; pointer-events: all; }
+        .confirm-btn.ready:hover { box-shadow: 0 0 20px var(--shadow-color); }
 
         .close-btn {
             background: transparent;
             color: #666;
             border: none;
-            margin-top: 15px;
+            margin-top: 20px;
             cursor: pointer;
             font-size: 0.9rem;
+            text-decoration: underline;
         }
 
         /* --- Loader --- */
         .loader {
-            width: 50px; height: 50px;
+            width: 60px; height: 60px;
             border: 4px solid rgba(255,215,0,0.1);
             border-top: 4px solid var(--accent-color);
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
+            margin: 0 auto 25px;
+            box-shadow: 0 0 20px var(--shadow-color);
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
@@ -245,21 +320,27 @@
         @media (min-width: 1024px) {
             .sidebar-item { padding: 25px 40px; }
             .modal-box { padding: 40px; }
+            .btn-prezes { font-size: 2.5rem; }
         }
     </style>
 </head>
 <body>
 
+    <div class="bg-spectrum"></div>
+
     <button class="menu-btn" onclick="toggleSidebar()">☰</button>
 
     <div id="sidebar" class="sidebar">
         <div class="sidebar-item" onclick="openShop()">🛒 Sklep Premium</div>
+        <a href="https://pablo-1446.github.io/" class="sidebar-item">⭐ Polecane Strony</a>
         <div class="sidebar-item" onclick="toggleSidebar()">🏠 Strona Główna</div>
     </div>
 
     <div class="hero-section">
         <a href="https://youtube.com/shorts/gRMtvqN-x2Q" target="_blank" class="btn-prezes">PREZES 👑</a>
         
+        <a href="https://www.google.com/maps/@54.3427364,18.2138853,3a,81y,229.29h,111.87t/data=!3m7!1e1!3m5!1st1yWuexskWnJMTD1QGyQ2Q!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D-21.86818839234421%26panoid%3Dt1yWuexskWnJMTD1QGyQ2Q%26yaw%3D229.29490883965605!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" class="btn-mystery">👁️ Kto ma wiedzieć ten wie</a>
+
         <div class="bottom-bar">
             <a href="https://4nv75.casino/pl" target="_blank" rel="noopener" class="partner-btn">NV Partners Group</a>
         </div>
@@ -267,33 +348,46 @@
 
     <div class="overlay" id="shopModal">
         <div class="modal-box">
-            <div class="modal-title">Subskrypcja VIP 💎</div>
+            <div class="modal-title">💎 Wybierz Pakiet</div>
+            
             <div class="shop-option" onclick="startPayment()">
                 <span>1 Miesiąc</span>
                 <span style="color:var(--accent-color)">29.99 PLN</span>
             </div>
+            
             <div class="shop-option" onclick="startPayment()">
-                <span>3 Miesiące</span>
+                <span>3 Miesiące <span class="best-value">-10%</span></span>
                 <span style="color:var(--accent-color)">59.99 PLN</span>
             </div>
+
+            <div class="shop-option" onclick="startPayment()">
+                <span>👑 VIP na Rok</span>
+                <span style="color:var(--accent-color)">199.00 PLN</span>
+            </div>
+
+            <div class="shop-option" onclick="startPayment()" style="border-color: #e2007e;">
+                <span>🐐 Dożywotni Prezes</span>
+                <span style="color:var(--accent-color)">999.00 PLN</span>
+            </div>
+
             <button class="close-btn" onclick="closeAllModals()">Anuluj</button>
         </div>
     </div>
 
     <div class="overlay" id="blikModal">
         <div class="modal-box">
-            <div style="font-weight:900; color:#e2007e; margin-bottom:10px;">BLIK</div>
-            <p>Wprowadź kod z aplikacji bankowej</p>
-            <input type="tel" id="blikCode" class="blik-input" maxlength="6" placeholder="000-000" oninput="validateBlik(this)">
-            <button id="blikConfirm" class="confirm-btn" onclick="processBlik()">ZAPŁAĆ TERAZ</button>
-            <button class="close-btn" onclick="closeAllModals()">Wróć</button>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/7/76/Blik_logo.svg" alt="BLIK" style="height: 40px; margin-bottom: 20px;">
+            <p style="color: #aaa; margin-bottom: 10px;">Wprowadź kod z aplikacji bankowej</p>
+            <input type="tel" id="blikCode" class="blik-input" maxlength="6" placeholder="000000" oninput="validateBlik(this)">
+            <button id="blikConfirm" class="confirm-btn" onclick="processBlik()">POTWIERDŹ PŁATNOŚĆ</button>
+            <button class="close-btn" onclick="closeAllModals()">Zmień metodę płatności</button>
         </div>
     </div>
 
-    <div class="overlay" id="loadingModal" style="background: rgba(0,0,0,0.95);">
-        <div class="modal-box" style="background:transparent; border:none;">
+    <div class="overlay" id="loadingModal" style="background: rgba(0,0,0,0.98);">
+        <div class="modal-box" style="background:transparent; border:none; box-shadow:none;">
             <div class="loader"></div>
-            <div id="statusText" style="letter-spacing:2px;">WERYFIKACJA...</div>
+            <div id="statusText" style="letter-spacing:3px; font-weight:900; color:var(--accent-color);">ŁĄCZENIE Z BANKIEM...</div>
         </div>
     </div>
 
@@ -315,7 +409,11 @@
         function startPayment() {
             document.getElementById("shopModal").classList.remove("active");
             document.getElementById("blikModal").classList.add("active");
-            document.getElementById("blikCode").focus();
+            // Reset input
+            const input = document.getElementById("blikCode");
+            input.value = '';
+            validateBlik(input);
+            input.focus();
         }
 
         function validateBlik(input) {
@@ -334,12 +432,17 @@
             
             const status = document.getElementById("statusText");
             
-            setTimeout(() => { status.innerText = "POBIERANIE DANYCH..."; }, 1500);
-            setTimeout(() => { status.innerText = "TRANSAKCJA ZAKOŃCZONA!"; status.style.color = "#00ff00"; }, 3500);
+            setTimeout(() => { status.innerText = "WERYFIKACJA KODU..."; }, 1000);
+            setTimeout(() => { status.innerText = "AUTORYZACJA..."; }, 2500);
             
-            // Przekierowanie do strony głównej po "zakupie"
+            setTimeout(() => { 
+                status.innerText = "SUKCES! PRZEKIEROWANIE..."; 
+                status.style.color = "#00ff00"; 
+            }, 4000);
+            
+            // Przekierowanie do linku po "zakupie"
             setTimeout(() => {
-                location.reload(); 
+                window.location.href = "https://pablo-1632.github.io/"; 
             }, 5500);
         }
 
